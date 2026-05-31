@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduQuest – SDG Quiz</title>
+  <style>
+    /* --- THEME VARIABLES (same as dashboard) --- */
+    :root {
+      --bg-color: #0c0a1a;
+      --primary-card: #1a1829;
+      --secondary-card: #2a2837;
+      --accent-purple: #763bf3;
+      --accent-pink: #9b59b6;
+      --text-primary: #ffffff;
+      --text-secondary: #a9a6b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --hero-gradient: radial-gradient(
+        ellipse 50% 40% at 50% 45%,
+        rgba(118, 59, 243, 0.4),
+        transparent
+      );
+    }
+
+    body.light-theme {
+      --bg-color: #f0fdf4;
+      --primary-card: #ffffff;
+      --secondary-card: #e2f3e1;
+      --accent-purple: #763bf3;
+      --accent-pink: #9b59b6;
+      --text-primary: #222222;
+      --text-secondary: #555555;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --hero-gradient: radial-gradient(
+        ellipse 50% 40% at 50% 45%,
+        rgba(118, 59, 243, 0.2),
+        transparent
+      );
+    }
+
+    /* --- GENERAL LAYOUT --- */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-color);
+      background-image: var(--hero-gradient);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      color: var(--text-primary);
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px
+      );
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* --- NAVBAR (same style as dashboard) --- */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--primary-card);
+      padding: 0 36px;
+      height: 58px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+      position: relative;
+      z-index: 2;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .logo {
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 8px 0;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background-image: linear-gradient(
+        to right,
+        var(--accent-purple),
+        var(--accent-pink)
+      );
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a.active,
+    .nav-links a:hover {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .nav-links a.active::after,
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .user {
+      background: linear-gradient(
+        135deg,
+        var(--accent-purple),
+        var(--accent-pink)
+      );
+      color: #ffffff;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 0 18px rgba(118, 59, 243, 0.8);
+    }
+
+    /* --- QUIZ CONTAINER --- */
+    .quiz-container {
+      margin: 40px auto;
+      padding: 30px 28px 32px 28px;
+      border-radius: 20px;
+      background: var(--primary-card);
+      border: 1px solid var(--border-color);
+      max-width: 900px;
+      width: 90%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+      z-index: 1;
+      position: relative;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .quiz-title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .quiz-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+      margin: 6px 0 18px 0;
+    }
+
+    .quiz-meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .pill strong {
+      color: #fff;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--secondary-card);
+      overflow: hidden;
+      margin-bottom: 18px;
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background-image: linear-gradient(
+        to right,
+        var(--accent-purple),
+        var(--accent-pink)
+      );
+      transition: width 0.25s ease-out;
+    }
+
+    /* --- QUESTION CARD --- */
+    .question-card {
+      background: var(--secondary-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 20px 22px 18px 22px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6);
+    }
+
+    .question-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .question-number {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .sdg-tag {
+      font-size: 0.82rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(118, 59, 243, 0.18);
+      border: 1px solid rgba(118, 59, 243, 0.6);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sdg-tag span.icon {
+      font-size: 1rem;
+    }
+
+    .question-text {
+      margin-top: 10px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    /* --- OPTIONS --- */
+    .options-list {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      background: #181524;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 0.98rem;
+      color: var(--text-primary);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      transition: 0.2s ease;
+    }
+
+    .option-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      width: 22px;
+    }
+
+    .option-text {
+      flex: 1;
+    }
+
+    .option-btn:hover {
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 16px rgba(118, 59, 243, 0.7);
+      transform: translateY(-1px);
+    }
+
+    .option-btn.correct {
+      border-color: #2ecc71;
+      background: rgba(46, 204, 113, 0.1);
+      box-shadow: 0 0 16px rgba(46, 204, 113, 0.7);
+    }
+
+    .option-btn.wrong {
+      border-color: #e74c3c;
+      background: rgba(231, 76, 60, 0.1);
+      box-shadow: 0 0 16px rgba(231, 76, 60, 0.7);
+    }
+
+    /* --- FEEDBACK & CONTROLS --- */
+    .feedback {
+      margin-top: 12px;
+      font-size: 0.96rem;
+    }
+
+    .feedback strong {
+      font-weight: 600;
+    }
+
+    .explanation {
+      margin-top: 6px;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      border-left: 2px solid var(--accent-purple);
+      padding-left: 8px;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .score-pill {
+      font-size: 0.94rem;
+      color: var(--text-secondary);
+    }
+
+    .primary-btn {
+      background-image: linear-gradient(
+        to right,
+        var(--accent-purple),
+        var(--accent-pink),
+        var(--accent-purple)
+      );
+      background-size: 200% auto;
+      color: #fff;
+      border-radius: 999px;
+      padding: 9px 22px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.98rem;
+      box-shadow: 0 12px 26px rgba(118, 59, 243, 0.75);
+      transition: all 0.25s ease;
+    }
+
+    .primary-btn[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .primary-btn:not([disabled]):hover {
+      background-position: right center;
+      transform: translateY(-1px);
+      box-shadow: 0 16px 34px rgba(118, 59, 243, 0.95);
+    }
+
+    /* --- RESULT AREA --- */
+    .result-card {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      background: rgba(0, 0, 0, 0.25);
+      font-size: 0.96rem;
+    }
+
+    .result-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 700px) {
+      .quiz-container {
+        margin: 20px auto;
+        padding: 20px 18px 22px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo">EduQuest</div>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="lessons.html">Lessons</a>
+      <a href="quiz.html" class="active">Quizzes</a>
+      <a href="game/game-list.html">Fun Games</a>
+    </div>
+    <div class="user" title="Ksv">K</div>
+  </div>
+
+  <!-- QUIZ BODY -->
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <div>
+        <h1 class="quiz-title">SDG & Environment Quiz</h1>
+        <p class="quiz-subtitle">
+          Test your knowledge of climate action, biodiversity, clean energy and sustainable cities.
+        </p>
+      </div>
+    </div>
+
+    <div class="quiz-meta">
+      <div class="pill">
+        <span>Question <strong id="question-counter">1</strong> / <strong id="question-total">10</strong></span>
+      </div>
+      <div class="pill">
+        Current SDG: <strong id="current-sdg-label">SDG 13 – Climate Action</strong>
+      </div>
+      <div class="pill">
+        Score: <strong id="score-label">0</strong>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-top">
+        <span class="question-number" id="question-number-label">Question 1</span>
+        <span class="sdg-tag" id="sdg-tag">
+          <span class="icon">🌍</span>
+          <span id="sdg-tag-text">SDG 13 · Climate Action</span>
+        </span>
+      </div>
+      <div class="question-text" id="question-text">
+        Loading question...
+      </div>
+
+      <div class="options-list" id="options-list">
+        <!-- options injected by JS -->
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+      <div class="explanation" id="explanation" style="display:none;"></div>
+
+      <div class="controls-row">
+        <div class="score-pill">Correct answers: <strong id="correct-count">0</strong></div>
+        <button class="primary-btn" id="next-btn" disabled>Next Question →</button>
+      </div>
+
+      <div class="result-card" id="result-card" style="display:none;">
+        <div class="result-title" id="result-title">Your result</div>
+        <div id="result-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- QUIZ DATA ----------
+    const questions = [
+      {
+        sdg: "SDG 13 – Climate Action",
+        sdgIcon: "🌍",
+        topic: "Climate change basics",
+        text: "Which action most directly helps reduce CO₂ emissions that drive climate change?",
+        options: [
+          "Using more single-use plastic bags",
+          "Switching from coal power to solar and wind energy",
+          "Leaving lights on all day",
+          "Burning more fossil fuels for transport"
+        ],
+        correctIndex: 1,
+        explanation: "Electricity generation from coal and oil is a major source of CO₂. Replacing fossil fuels with renewable energy strongly cuts emissions."
+      },
+      {
+        sdg: "SDG 12 – Responsible Consumption & Production",
+        sdgIcon: "♻️",
+        topic: "Waste & lifestyle",
+        text: "You buy a reusable metal water bottle instead of many plastic ones. This mainly supports SDG 12 because it:",
+        options: [
+          "Increases landfill waste",
+          "Encourages responsible consumption and reduces plastic waste",
+          "Uses more water than plastic bottles",
+          "Makes products harder to recycle"
+        ],
+        correctIndex: 1,
+        explanation: "Reusable products reduce demand for single-use plastics and cut the waste generated across a product’s life cycle."
+      },
+      {
+        sdg: "SDG 14 – Life Below Water",
+        sdgIcon: "🐟",
+        topic: "Oceans & pollution",
+        text: "Which practice is best for protecting marine life and coral reefs?",
+        options: [
+          "Throwing fishing nets and plastic into the sea",
+          "Overfishing popular species",
+          "Reducing plastic use and treating wastewater before it reaches the ocean",
+          "Mining sand from coral reefs"
+        ],
+        correctIndex: 2,
+        explanation: "Plastic and untreated sewage damage marine ecosystems. Cutting pollution at the source protects corals, fish and other life."
+      },
+      {
+        sdg: "SDG 15 – Life on Land",
+        sdgIcon: "🌱",
+        topic: "Forests & biodiversity",
+        text: "What is the most effective way to protect a forest home of endangered species like orangutans?",
+        options: [
+          "Clearing more land for plantations",
+          "Creating and enforcing protected areas that stop deforestation",
+          "Building more roads through the forest",
+          "Catching animals and selling them as pets"
+        ],
+        correctIndex: 1,
+        explanation: "Protected areas and strong enforcement keep forests standing, which conserves habitat and biodiversity."
+      },
+      {
+        sdg: "SDG 7 – Affordable & Clean Energy",
+        sdgIcon: "🔆",
+        topic: "Energy",
+        text: "Which energy source is considered renewable and low-carbon?",
+        options: [
+          "Coal-fired power plant",
+          "Diesel generator",
+          "Solar photovoltaic panels",
+          "Oil refinery"
+        ],
+        correctIndex: 2,
+        explanation: "Solar PV uses sunlight to generate electricity without ongoing fuel combustion, making it a renewable and low-carbon source."
+      },
+      {
+        sdg: "SDG 11 – Sustainable Cities & Communities",
+        sdgIcon: "🏙️",
+        topic: "Cities & transport",
+        text: "A city wants to cut air pollution and traffic emissions. Which policy best supports SDG 11?",
+        options: [
+          "Expanding safe cycling lanes and electric public transport",
+          "Encouraging everyone to drive alone in larger cars",
+          "Removing all sidewalks",
+          "Allowing unlimited diesel vehicles in city centers"
+        ],
+        correctIndex: 0,
+        explanation: "Cycling lanes and clean public transport reduce car dependence, improve air quality, and make cities more livable."
+      },
+      {
+        sdg: "SDG 6 – Clean Water & Sanitation",
+        sdgIcon: "🚰",
+        topic: "Water",
+        text: "Which action best protects rivers and lakes used for drinking water?",
+        options: [
+          "Dumping industrial waste directly into rivers",
+          "Using proper wastewater treatment and reducing chemical use",
+          "Throwing household garbage on riverbanks",
+          "Draining wetlands that filter pollution"
+        ],
+        correctIndex: 1,
+        explanation: "Treating wastewater and reducing harmful chemicals prevents pollutants from entering freshwater ecosystems."
+      },
+      {
+        sdg: "SDG 2 – Zero Hunger & sustainable agriculture",
+        sdgIcon: "🌾",
+        topic: "Food systems",
+        text: "Which farming method is more sustainable for soil and biodiversity?",
+        options: [
+          "Cutting down forests to grow a single crop everywhere",
+          "Using crop rotation, mixed crops and reduced chemical inputs",
+          "Burning crop residues in large open fires",
+          "Overusing chemical fertilizers and pesticides"
+        ],
+        correctIndex: 1,
+        explanation: "Crop rotation and mixed cropping keep soils healthy, reduce pest outbreaks and support biodiversity on farms."
+      },
+      {
+        sdg: "SDG 13 – Climate Action",
+        sdgIcon: "🌍",
+        topic: "Everyday climate actions",
+        text: "Which everyday choice helps lower your personal carbon footprint the most?",
+        options: [
+          "Walking, cycling or using public transport instead of driving short distances alone",
+          "Leaving chargers and lights on when not in use",
+          "Buying more fast fashion clothing you rarely wear",
+          "Wasting food by throwing away leftovers"
+        ],
+        correctIndex: 0,
+        explanation: "Transport is a big part of many people’s emissions. Active travel and public transport significantly reduce fuel use and CO₂."
+      },
+      {
+        sdg: "SDG 4 – Quality Education (for sustainability)",
+        sdgIcon: "📚",
+        topic: "Environmental education",
+        text: "Why is environmental education important for achieving the SDGs?",
+        options: [
+          "It only teaches scientific formulas",
+          "It helps people understand problems but does not change behavior",
+          "It builds awareness, skills and attitudes so people can make sustainable choices and take action",
+          "It replaces all other school subjects"
+        ],
+        correctIndex: 2,
+        explanation: "Education for sustainable development empowers learners to think critically, make informed decisions and participate in climate and SDG solutions."
+      }
+    ];
+
+    // ---------- STATE ----------
+    let currentIndex = 0;
+    let score = 0;
+    let correctCount = 0;
+    let answered = false;
+
+    // ---------- DOM ----------
+    const questionCounterEl = document.getElementById("question-counter");
+    const questionTotalEl = document.getElementById("question-total");
+    const currentSdgLabelEl = document.getElementById("current-sdg-label");
+    const progressFillEl = document.getElementById("progress-fill");
+    const questionNumberLabelEl = document.getElementById("question-number-label");
+    const sdgTagEl = document.getElementById("sdg-tag");
+    const sdgTagTextEl = document.getElementById("sdg-tag-text");
+    const questionTextEl = document.getElementById("question-text");
+    const optionsListEl = document.getElementById("options-list");
+    const feedbackEl = document.getElementById("feedback");
+    const explanationEl = document.getElementById("explanation");
+    const scoreLabelEl = document.getElementById("score-label");
+    const correctCountEl = document.getElementById("correct-count");
+    const nextBtn = document.getElementById("next-btn");
+    const resultCardEl = document.getElementById("result-card");
+    const resultTitleEl = document.getElementById("result-title");
+    const resultTextEl = document.getElementById("result-text");
+
+    questionTotalEl.textContent = questions.length;
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      answered = false;
+      nextBtn.disabled = true;
+      feedbackEl.textContent = "";
+      explanationEl.style.display = "none";
+      explanationEl.textContent = "";
+      resultCardEl.style.display = "none";
+
+      questionCounterEl.textContent = currentIndex + 1;
+      questionNumberLabelEl.textContent = `Question ${currentIndex + 1}`;
+      currentSdgLabelEl.textContent = q.sdg;
+      sdgTagTextEl.textContent = `${q.sdg}`;
+      sdgTagEl.querySelector(".icon")?.remove();
+
+      const iconSpan = document.createElement("span");
+      iconSpan.className = "icon";
+      iconSpan.textContent = q.sdgIcon;
+      sdgTagEl.insertBefore(iconSpan, sdgTagEl.firstChild);
+
+      questionTextEl.textContent = q.text;
+
+      // progress
+      const percent = ((currentIndex) / questions.length) * 100;
+      progressFillEl.style.width = percent + "%";
+
+      // options
+      optionsListEl.innerHTML = "";
+      const labels = ["A", "B", "C", "D"];
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.dataset.index = idx;
+
+        const labelSpan = document.createElement("span");
+        labelSpan.className = "option-label";
+        labelSpan.textContent = labels[idx];
+
+        const textSpan = document.createElement("span");
+        textSpan.className = "option-text";
+        textSpan.textContent = opt;
+
+        btn.appendChild(labelSpan);
+        btn.appendChild(textSpan);
+
+        btn.addEventListener("click", () => handleOptionClick(idx, btn));
+        optionsListEl.appendChild(btn);
+      });
+
+      // update next button text
+      nextBtn.textContent =
+        currentIndex === questions.length - 1
+          ? "See Results"
+          : "Next Question →";
+    }
+
+    function handleOptionClick(index, btnEl) {
+      if (answered) return;
+      answered = true;
+
+      const q = questions[currentIndex];
+      const buttons = optionsListEl.querySelectorAll(".option-btn");
+
+      buttons.forEach((b, i) => {
+        if (i === q.correctIndex) {
+          b.classList.add("correct");
+        }
+        b.disabled = true;
+      });
+
+      if (index === q.correctIndex) {
+        score += 10;
+        correctCount += 1;
+        feedbackEl.innerHTML = "✅ <strong>Correct!</strong> +10 eco-points";
+      } else {
+        btnEl.classList.add("wrong");
+        feedbackEl.innerHTML = "❌ <strong>Not quite.</strong>";
+      }
+
+      explanationEl.style.display = "block";
+      explanationEl.textContent = q.explanation;
+
+      scoreLabelEl.textContent = score;
+      correctCountEl.textContent = correctCount;
+      nextBtn.disabled = false;
+    }
+
+    function showResults() {
+      const total = questions.length;
+      const percentage = Math.round((correctCount / total) * 100);
+
+      let message;
+      if (percentage === 100) {
+        message = "Outstanding! You’re an Eco-SDG Champion. 🌟";
+      } else if (percentage >= 70) {
+        message = "Great work! You have strong SDG & environment knowledge. Keep going. 💚";
+      } else if (percentage >= 40) {
+        message = "Nice attempt! Review a few topics and try again. 📚";
+      } else {
+        message = "Good start. Use the lessons and games to build your SDG superpowers. 🌱";
+      }
+
+      resultTitleEl.textContent = `Final Score: ${score} eco-points (${percentage}%)`;
+      resultTextEl.textContent = message + " Click the button above to retry.";
+      resultCardEl.style.display = "block";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (!answered) return;
+
+      if (currentIndex < questions.length - 1) {
+        currentIndex += 1;
+        loadQuestion();
+      } else {
+        // progress bar full
+        progressFillEl.style.width = "100%";
+        showResults();
+        // turn button into "Restart"
+        nextBtn.textContent = "Restart Quiz";
+        nextBtn.onclick = () => {
+          // reset state
+          currentIndex = 0;
+          score = 0;
+          correctCount = 0;
+          scoreLabelEl.textContent = "0";
+          correctCountEl.textContent = "0";
+          nextBtn.onclick = null;
+          nextBtn.addEventListener("click", () => {});
+          // reattach main handler
+          nextBtn.removeEventListener("click", arguments.callee);
+          // clean and restart
+          nextBtn.textContent = "Next Question →";
+          initQuiz();
+        };
+      }
+    });
+
+    function initQuiz() {
+      // remove all existing click listeners from nextBtn, then re-add main one
+      nextBtn.replaceWith(nextBtn.cloneNode(true));
+      const newNextBtn = document.getElementById("next-btn");
+      newNextBtn.addEventListener("click", () => {
+        if (!answered) return;
+        if (currentIndex < questions.length - 1) {
+          currentIndex += 1;
+          loadQuestion();
+        } else {
+          progressFillEl.style.width = "100%";
+          showResults();
+          newNextBtn.textContent = "Restart Quiz";
+          newNextBtn.onclick = () => {
+            currentIndex = 0;
+            score = 0;
+            correctCount = 0;
+            scoreLabelEl.textContent = "0";
+            correctCountEl.textContent = "0";
+            location.reload();
+          };
+        }
+      });
+      loadQuestion();
+    }
+
+    // simpler: just start once with loadQuestion()
+    loadQuestion();
+  </script>
+</body>
+</html>

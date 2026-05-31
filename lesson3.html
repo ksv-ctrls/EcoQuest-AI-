@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson 3 • Water Conservation Strategies</title>
+
+  <style>
+    :root {
+      --bg-color: #0c0a1a;
+      --primary-card: #1a1829;
+      --secondary-card: #2a2837;
+      --accent-purple: #763bf3;
+      --accent-pink: #9b59b6;
+      --text-primary: #ffffff;
+      --text-secondary: #a9a6b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --hero-gradient: radial-gradient(
+        ellipse 50% 40% at 50% 45%,
+        rgba(118, 59, 243, 0.4),
+        transparent
+      );
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", system-ui, sans-serif;
+      background-color: var(--bg-color);
+      background-image: var(--hero-gradient);
+      color: var(--text-primary);
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--primary-card);
+      padding: 0 36px;
+      height: 58px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .logo { font-weight: 600; font-size: 1.5rem; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 8px 0;
+      position: relative;
+    }
+    .nav-links a.active,
+    .nav-links a:hover {
+      color: #fff;
+      font-weight: 600;
+    }
+    .nav-links a.active::after,
+    .nav-links a:hover::after {
+      content: "";
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 100%; height: 2px;
+      border-radius: 999px;
+      background-image: linear-gradient(to right,var(--accent-purple),var(--accent-pink));
+    }
+
+    .page-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .lesson-header-card {
+      background: var(--primary-card);
+      border-radius: 18px;
+      padding: 22px 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+      margin-bottom: 22px;
+    }
+
+    .lesson-title { font-size: 1.7rem; margin: 0 0 4px 0; }
+
+    .lesson-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .chip {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border-color);
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+
+    .back-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 999px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .back-btn:hover {
+      color: #fff;
+      border-color: var(--accent-purple);
+    }
+
+    .content-section {
+      background: var(--secondary-card);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.5);
+    }
+
+    h3 { font-size: 1.1rem; margin-top: 0; }
+
+    p, ul { color: var(--text-secondary); line-height: 1.6; }
+
+    ul { margin-left: 22px; }
+
+    .highlight-box {
+      border-left: 3px solid var(--accent-purple);
+      padding-left: 12px;
+      margin-top: 8px;
+    }
+
+    .activity-box {
+      margin-top: 8px;
+      padding: 12px 14px;
+      background: rgba(118,59,243,0.1);
+      border: 1px dashed rgba(118,59,243,0.6);
+      border-radius: 12px;
+    }
+
+    .mini-quiz strong { color: #fff; }
+  </style>
+
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="logo">EduQuest</div>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="lessons.html" class="active">Lessons</a>
+      <a href="quiz.html">Quizzes</a>
+      <a href="game/game-list.html">Fun Games</a>
+    </div>
+  </div>
+
+  <div class="page-container">
+
+    <button class="back-btn" onclick="window.location.href='lessons.html'">← Back to all lessons</button>
+
+    <div class="lesson-header-card">
+      <h1 class="lesson-title">Lesson 3: Water Conservation Strategies</h1>
+      <div class="lesson-meta">
+        <span class="chip">SDG 6 – Clean Water & Sanitation</span>
+        <span class="chip">Duration: 12 mins</span>
+        <span class="chip">Level: Beginner</span>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>1. Lesson Overview</h3>
+      <p>
+        This lesson explains why fresh water is limited, how households and schools waste water, 
+        and simple strategies to conserve water effectively.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h3>2. Learning Objectives</h3>
+      <ul>
+        <li>Explain why water is a limited resource.</li>
+        <li>Identify common ways households waste water.</li>
+        <li>Suggest practical water-saving methods for daily life.</li>
+      </ul>
+    </div>
+
+    <div class="content-section">
+      <h3>3. Key Ideas</h3>
+      <ul>
+        <li>Only a tiny fraction of Earth’s water is usable fresh water.</li>
+        <li>Leaks, long showers, running taps, and overwatering plants waste huge amounts of water.</li>
+        <li>Rainwater harvesting, fixing leaks, and mindful use save water efficiently.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <p>
+          Many Indian cities face summer water shortages. Buildings that use rooftop rainwater harvesting
+          reduce pressure on groundwater supplies.
+        </p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>4. Real-World Example</h3>
+      <p>
+        In Chennai, water scarcity became severe due to reduced rainfall and over-extraction of groundwater. 
+        Schools that implemented rainwater harvesting managed to save thousands of litres per month.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h3>5. Try This Activity</h3>
+      <div class="activity-box">
+        <p>
+          Track your water use for one full day — brushing, bathing, washing, cooking. 
+          At the end, choose one habit you will change starting tomorrow to reduce your daily water usage.
+        </p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>6. Reflect & Discuss</h3>
+      <ul>
+        <li>Does your home or school have a rainwater-harvesting system?</li>
+        <li>Which water-wasting habit from your routine can you realistically change?</li>
+      </ul>
+    </div>
+
+    <div class="content-section">
+      <h3>7. Mini Self-Check</h3>
+      <p class="mini-quiz">
+        💧 <strong>Quick check:</strong> Name one structural solution (like rainwater harvesting)
+        and one personal habit change that can save water.
+      </p>
+      <p style="color:var(--text-secondary); margin-top: 8px;">
+        Say your answer aloud or write it down — no typing needed.
+      </p>
+    </div>
+
+  </div>
+
+</body>
+</html>

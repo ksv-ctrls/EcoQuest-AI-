@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson 1 • Climate Change Basics</title>
+  <style>
+    :root {
+      --bg-color: #0c0a1a;
+      --primary-card: #1a1829;
+      --secondary-card: #2a2837;
+      --accent-purple: #763bf3;
+      --accent-pink: #9b59b6;
+      --text-primary: #ffffff;
+      --text-secondary: #a9a6b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --hero-gradient: radial-gradient(
+        ellipse 50% 40% at 50% 45%,
+        rgba(118, 59, 243, 0.4),
+        transparent
+      );
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", system-ui, sans-serif;
+      background-color: var(--bg-color);
+      background-image: var(--hero-gradient);
+      color: var(--text-primary);
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--primary-card);
+      padding: 0 36px;
+      height: 58px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .logo { font-weight: 600; font-size: 1.5rem; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 1rem;
+      position: relative;
+      padding: 8px 0;
+    }
+    .nav-links a.active,
+    .nav-links a:hover {
+      color: #fff;
+      font-weight: 600;
+    }
+    .nav-links a.active::after,
+    .nav-links a:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      height: 2px;
+      width: 100%;
+      border-radius: 999px;
+      background-image: linear-gradient(
+        to right,
+        var(--accent-purple),
+        var(--accent-pink)
+      );
+    }
+
+    .page-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .lesson-header-card {
+      background: var(--primary-card);
+      border-radius: 18px;
+      padding: 22px 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+      margin-bottom: 22px;
+    }
+
+    .lesson-title {
+      font-size: 1.7rem;
+      margin: 0 0 4px 0;
+    }
+
+    .lesson-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: rgba(0,0,0,0.3);
+      font-size: 0.8rem;
+    }
+
+    .back-btn {
+      margin-bottom: 16px;
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      border-color: var(--accent-purple);
+      color: #fff;
+    }
+
+    .content-section {
+      background: var(--secondary-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.5);
+    }
+    .content-section h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.1rem;
+    }
+    .content-section p {
+      margin: 6px 0;
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    ul {
+      margin: 6px 0 6px 20px;
+      padding: 0;
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+    }
+    li { margin-bottom: 4px; }
+
+    .highlight-box {
+      border-left: 3px solid var(--accent-purple);
+      padding-left: 10px;
+      margin-top: 8px;
+    }
+
+    .activity-box {
+      border-radius: 14px;
+      border: 1px dashed rgba(118,59,243,0.7);
+      padding: 12px 14px;
+      margin-top: 6px;
+      background: rgba(118,59,243,0.1);
+    }
+
+    .mini-quiz { margin-top: 10px; font-size: 0.96rem; }
+    .mini-quiz strong { color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">EduQuest</div>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="lessons.html" class="active">Lessons</a>
+      <a href="quiz.html">Quizzes</a>
+      <a href="game/game-list.html">Fun Games</a>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <button class="back-btn" onclick="window.location.href='lessons.html'">
+      ← Back to all lessons
+    </button>
+
+    <div class="lesson-header-card">
+      <h1 class="lesson-title">Lesson 1: Climate Change Basics</h1>
+      <div class="lesson-meta">
+        <span class="chip">SDG 13 – Climate Action</span>
+        <span class="chip">Duration: 15 mins</span>
+        <span class="chip">Level: Beginner</span>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>1. Lesson overview</h3>
+      <p>
+        In this lesson you’ll understand what climate change is, why it is happening, and why it matters for people and ecosystems. 
+        You’ll see how greenhouse gases trap heat and how this changes weather patterns around the world.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h3>2. Learning objectives</h3>
+      <ul>
+        <li>Explain the difference between weather and climate.</li>
+        <li>Identify the main human causes of climate change.</li>
+        <li>Describe at least two impacts of climate change on people or nature.</li>
+      </ul>
+    </div>
+
+    <div class="content-section">
+      <h3>3. Key ideas</h3>
+      <ul>
+        <li>
+          <strong>Weather vs climate:</strong> Weather is the condition of the atmosphere on a short time scale (today or this week). 
+          Climate is the average pattern of weather over many years.
+        </li>
+        <li>
+          <strong>Greenhouse effect:</strong> Burning fossil fuels like coal, oil and gas releases CO₂, a greenhouse gas. CO₂ traps heat near the Earth’s surface and causes global warming.
+        </li>
+        <li>
+          <strong>Impacts:</strong> Climate change can cause stronger heatwaves, shifting rainfall, melting ice sheets and rising sea levels.
+        </li>
+      </ul>
+      <div class="highlight-box">
+        <p>
+          <strong>India example:</strong> Many parts of India are already experiencing more intense heatwaves and changes in monsoon patterns. 
+          This affects agriculture, water supply, health and daily life.
+        </p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>4. Real-world example</h3>
+      <p>
+        When temperatures rise and rainfall patterns change, farmers may lose crops due to drought or floods. 
+        Cities may face water shortages or flooding. Coastal communities can be forced to move inland because of sea-level rise and storms.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h3>5. Try this activity</h3>
+      <div class="activity-box">
+        <p>
+          For one day, note down every activity you do that uses electricity or fuel, such as using a fan, AC, mobile charging, travelling by bus or bike, 
+          and switching on lights. Put a star next to activities you could reduce, switch off sooner, or do in a more efficient way.
+        </p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>6. Reflect & discuss</h3>
+      <ul>
+        <li>Which climate impact worries you the most in your city or region, and why?</li>
+        <li>Name one lifestyle change you can start this week to reduce your carbon footprint (for example: walking more, saving electricity, or eating less wastefully).</li>
+      </ul>
+    </div>
+
+    <div class="content-section">
+      <h3>7. Mini self-check</h3>
+      <p class="mini-quiz">
+        🌍 <strong>Quick check:</strong> Name one greenhouse gas and one climate change impact you read about in this lesson.
+      </p>
+      <p style="margin-top:8px;color:var(--text-secondary);">
+        You don’t have to type the answer here – say it out loud or write it in your notebook to lock in your learning.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

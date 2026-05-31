@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson • EcoGamifiedEdu</title>
+  <style>
+    :root {
+      --bg-color: #0c0a1a;
+      --primary-card: #1a1829;
+      --secondary-card: #2a2837;
+      --accent-purple: #763bf3;
+      --accent-pink: #9b59b6;
+      --text-primary: #ffffff;
+      --text-secondary: #a9a6b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --hero-gradient: radial-gradient(
+        ellipse 50% 40% at 50% 45%,
+        rgba(118, 59, 243, 0.4),
+        transparent
+      );
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", system-ui, sans-serif;
+      background-color: var(--bg-color);
+      background-image: var(--hero-gradient);
+      color: var(--text-primary);
+    }
+
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--primary-card);
+      padding: 0 36px;
+      height: 58px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .logo { font-weight: 600; font-size: 1.5rem; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 1rem;
+      position: relative;
+      padding: 8px 0;
+    }
+    .nav-links a.active,
+    .nav-links a:hover {
+      color: #fff;
+      font-weight: 600;
+    }
+    .nav-links a.active::after,
+    .nav-links a:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      height: 2px;
+      width: 100%;
+      border-radius: 999px;
+      background-image: linear-gradient(
+        to right,
+        var(--accent-purple),
+        var(--accent-pink)
+      );
+    }
+
+    /* PAGE LAYOUT */
+    .page-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .lesson-header-card {
+      background: var(--primary-card);
+      border-radius: 18px;
+      padding: 22px 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+      margin-bottom: 22px;
+    }
+
+    .lesson-title {
+      font-size: 1.7rem;
+      margin: 0 0 4px 0;
+    }
+
+    .lesson-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: rgba(0,0,0,0.3);
+      font-size: 0.8rem;
+    }
+
+    .back-btn {
+      margin-bottom: 16px;
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      border-color: var(--accent-purple);
+      color: #fff;
+    }
+
+    /* CONTENT SECTIONS */
+    .content-section {
+      background: var(--secondary-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.5);
+    }
+
+    .content-section h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.1rem;
+    }
+
+    .content-section p {
+      margin: 6px 0;
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    ul {
+      margin: 6px 0 6px 20px;
+      padding: 0;
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+    }
+
+    li { margin-bottom: 4px; }
+
+    .highlight-box {
+      border-left: 3px solid var(--accent-purple);
+      padding-left: 10px;
+      margin-top: 8px;
+    }
+
+    .activity-box {
+      border-radius: 14px;
+      border: 1px dashed rgba(118,59,243,0.7);
+      padding: 12px 14px;
+      margin-top: 6px;
+      background: rgba(118,59,243,0.1);
+    }
+
+    .mini-quiz {
+      margin-top: 10px;
+      font-size: 0.96rem;
+    }
+
+    .mini-quiz strong {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo">EcoGamifiedEdu</div>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="lessons.html" class="active">Lessons</a>
+      <a href="quiz.html">Quizzes</a>
+      <a href="game/game-list.html">Fun Games</a>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <button class="back-btn" onclick="window.location.href='lessons.html'">
+      ← Back to all lessons
+    </button>
+
+    <div id="lesson-header" class="lesson-header-card">
+      <h1 id="lesson-title" class="lesson-title">Loading lesson...</h1>
+      <div id="lesson-meta" class="lesson-meta"></div>
+    </div>
+
+    <div id="lesson-content">
+      <!-- Sections will be injected by JS -->
+    </div>
+  </div>
+
+  <script>
+    // All lesson data lives here:
+    const lessons = {
+      "climate-basics": {
+        title: "Climate Change Basics",
+        sdg: "SDG 13 – Climate Action",
+        duration: "15 mins",
+        level: "Beginner",
+        summary:
+          "In this lesson you’ll understand what climate change is, why it is happening, and why it matters for people and ecosystems.",
+        objectives: [
+          "Explain the difference between weather and climate.",
+          "Identify the main human causes of climate change.",
+          "Describe at least two impacts of climate change on people or nature."
+        ],
+        keyIdeas: [
+          "Climate is the long-term pattern of temperature and rainfall; weather is what you see outside today.",
+          "Burning fossil fuels (coal, oil, gas) releases CO₂, a greenhouse gas that traps heat in the atmosphere.",
+          "Climate change increases heatwaves, changes rainfall, melts ice and raises sea levels."
+        ],
+        example:
+          "India is already facing more intense heatwaves and changing monsoon patterns. This affects farmers, cities and water availability.",
+        activity:
+          "For one day, note activities that use electricity or fuel (fan, AC, bus, scooter, lights, mobile charging). Mark which ones you could reduce or make more efficient.",
+        reflection: [
+          "Which climate impact worries you the most in your city or region?",
+          "Name one lifestyle change you can start this week to reduce your carbon footprint."
+        ],
+        miniQuiz:
+          "🌍 Quick check: Name one greenhouse gas and one climate change impact you read about just now."
+      },
+
+      "biodiversity-conservation": {
+        title: "Biodiversity & Habitat Conservation",
+        sdg: "SDG 14 & SDG 15 – Life Below Water & Life on Land",
+        duration: "20 mins",
+        level: "Intermediate",
+        summary:
+          "This lesson explores the variety of life on Earth (biodiversity), why it matters, and how habitat loss threatens species.",
+        objectives: [
+          "Define biodiversity in simple words.",
+          "List two reasons why biodiversity is important for humans.",
+          "Explain how deforestation or pollution can reduce biodiversity."
+        ],
+        keyIdeas: [
+          "Biodiversity includes animals, plants, fungi and microorganisms, plus the ecosystems they form.",
+          "Healthy ecosystems provide services: clean air, water, food, medicines and climate regulation.",
+          "Major threats include habitat destruction, overuse of resources, pollution, invasive species and climate change."
+        ],
+        example:
+          "When mangrove forests are cleared for shrimp farms or construction, fish nurseries disappear, shorebirds lose feeding areas and coasts become more vulnerable to storms.",
+        activity:
+          "Choose one local ecosystem (lake, field, small forest patch, park). List at least 5 different species you can observe (plants, insects, birds, animals).",
+        reflection: [
+          "Which species in your area seem to be declining or rarely seen now?",
+          "What simple action could your school or community take to protect a nearby habitat?"
+        ],
+        miniQuiz:
+          "🦋 Quick check: Why is habitat loss such a serious problem for biodiversity?"
+      },
+
+      "water-conservation": {
+        title: "Water Conservation Strategies",
+        sdg: "SDG 6 – Clean Water & Sanitation",
+        duration: "12 mins",
+        level: "Beginner",
+        summary:
+          "You’ll learn why fresh water is limited, where we waste it, and practical ways to save water at home and in school.",
+        objectives: [
+          "Describe why water is a limited resource even though Earth is mostly water.",
+          "Identify at least three common ways households waste water.",
+          "Suggest simple water-saving actions for daily life."
+        ],
+        keyIdeas: [
+          "Most of Earth’s water is salty or locked in ice; only a tiny part is easily usable fresh water.",
+          "Leaks, long showers, running taps while brushing, and overwatering plants all waste water.",
+          "Rainwater harvesting, fixing leaks, low-flow taps and mindful use are effective strategies."
+        ],
+        example:
+          "Many Indian cities face water shortages in summer. Buildings that use rooftop rainwater harvesting reduce pressure on groundwater and municipal supply.",
+        activity:
+          "Track your water use for one day: brushing, bathing, washing, cooking. Write one concrete change you will make tomorrow to reduce this.",
+        reflection: [
+          "Does your school or home practice rainwater harvesting? If not, where could a simple system be built?",
+          "Which water-wasting habit is hardest for you to change?"
+        ],
+        miniQuiz:
+          "💧 Quick check: Name one structural solution (like rainwater harvesting) and one behavior change that conserve water."
+      },
+
+      "sustainable-cities": {
+        title: "Sustainable Cities & Communities",
+        sdg: "SDG 11 – Sustainable Cities & Communities",
+        duration: "18 mins",
+        level: "Intermediate",
+        summary:
+          "This lesson explains what makes a city sustainable, including transport, housing, green spaces and waste systems.",
+        objectives: [
+          "Define a ‘sustainable city’ in your own words.",
+          "Recognize how transport, buildings and waste systems affect urban sustainability.",
+          "Give one example of a change that could make your area more sustainable."
+        ],
+        keyIdeas: [
+          "Sustainable cities are safe, inclusive, resilient and low-carbon.",
+          "Good public transport, cycling and walking infrastructure reduce congestion and air pollution.",
+          "Green spaces, efficient buildings and good waste management improve health and quality of life."
+        ],
+        example:
+          "Some Indian cities are adding metro lines, bicycle-sharing systems and low-emission zones to reduce traffic pollution.",
+        activity:
+          "Draw a simple map of your route to school. Mark where walking paths, trees, cycle lanes or safer crossings could be added.",
+        reflection: [
+          "What is one thing you like and one thing you dislike about how your city is planned?",
+          "If you were the mayor for a day, what sustainable city project would you start first?"
+        ],
+        miniQuiz:
+          "🏙️ Quick check: Why does better public transport help both people and the environment?"
+      },
+
+      "renewable-energy": {
+        title: "Renewable Energy Sources",
+        sdg: "SDG 7 – Affordable & Clean Energy",
+        duration: "10 mins",
+        level: "Beginner",
+        summary:
+          "You’ll compare fossil fuels with renewable energy and see how solar, wind and hydro can power a cleaner future.",
+        objectives: [
+          "List at least three renewable energy sources.",
+          "Explain why fossil fuels are considered non-renewable.",
+          "Describe one advantage of solar or wind power."
+        ],
+        keyIdeas: [
+          "Renewable energy comes from sources that naturally replenish, like sun, wind and water.",
+          "Fossil fuels take millions of years to form and release CO₂ when burned.",
+          "Solar panels and wind turbines produce electricity without emitting CO₂ during operation."
+        ],
+        example:
+          "Many schools install rooftop solar panels to reduce their electricity bills and carbon footprint.",
+        activity:
+          "Look around your neighborhood or city (or online maps). Can you spot any solar panels, wind turbines or small hydro plants?",
+        reflection: [
+          "What barriers might stop more people from using renewable energy in your area?",
+          "How could governments or communities support a faster transition to clean energy?"
+        ],
+        miniQuiz:
+          "🔆 Quick check: Name one renewable and one non-renewable energy source."
+      },
+
+      "waste-management": {
+        title: "Waste Management Techniques",
+        sdg: "SDG 12 – Responsible Consumption & Production",
+        duration: "14 mins",
+        level: "Intermediate",
+        summary:
+          "This lesson covers the 3Rs (and more!), and how proper waste management protects health and the environment.",
+        objectives: [
+          "Explain the meaning of Reduce, Reuse, Recycle.",
+          "Identify different waste categories: organic, recyclable, e-waste, hazardous.",
+          "Suggest improvements for waste handling at home or school."
+        ],
+        keyIdeas: [
+          "The best waste is the waste that is never created: reducing and reusing come before recycling.",
+          "Segregation at source (separating waste at home) makes recycling and composting possible.",
+          "E-waste and hazardous waste must be handled carefully to avoid pollution and health impacts."
+        ],
+        example:
+          "Some campuses become ‘zero-waste’ by banning certain single-use plastics and setting up compost and recycling stations.",
+        activity:
+          "Check your school’s dustbins. Are different types of waste mixed together? Make a simple poster encouraging proper segregation.",
+        reflection: [
+          "Which waste item do you throw away most often? Could you avoid or replace it?",
+          "What is one realistic change your class could make this month to reduce waste?"
+        ],
+        miniQuiz:
+          "♻️ Quick check: Why is ‘Reduce’ usually placed before ‘Reuse’ and ‘Recycle’?"
+      },
+
+      "carbon-footprint": {
+        title: "Carbon Footprint Reduction",
+        sdg: "SDG 13 – Climate Action",
+        duration: "8 mins",
+        level: "Short micro-lesson",
+        summary:
+          "A carbon footprint measures the total greenhouse gas emissions caused by a person, product or activity.",
+        objectives: [
+          "Define the term ‘carbon footprint’.",
+          "Recognize daily actions that increase or reduce footprints.",
+          "Identify at least two changes to lower your own emissions."
+        ],
+        keyIdeas: [
+          "Transport, electricity use, food choices and shopping all add to a person’s carbon footprint.",
+          "Using public transport, saving energy and wasting less food all reduce emissions.",
+          "Small actions by millions of people add up to huge global impact."
+        ],
+        example:
+          "Choosing to walk or cycle short distances not only cuts emissions but also improves health.",
+        activity:
+          "List 5 actions from your normal week that probably increase your carbon footprint, and write a low-carbon alternative for each.",
+        reflection: [
+          "Which of your habits do you think has the biggest carbon impact?",
+          "What is one easy change you can start today that you can realistically keep doing?"
+        ],
+        miniQuiz:
+          "🌡 Quick check: Give one example of a high-carbon activity and one low-carbon alternative."
+      },
+
+      "wildlife-india": {
+        title: "Wildlife Threats in India",
+        sdg: "SDG 15 – Life on Land",
+        duration: "12 mins",
+        level: "Intermediate",
+        summary:
+          "India has rich wildlife, but many species face threats from habitat loss, poaching and human-wildlife conflict.",
+        objectives: [
+          "Name at least two threatened species found in India.",
+          "Describe how human activities can create conflict with wildlife.",
+          "Suggest ways local communities can help protect wildlife."
+        ],
+        keyIdeas: [
+          "Habitat loss, illegal hunting and pollution are major threats to wildlife.",
+          "When farms or settlements expand into forests, wildlife may raid crops or livestock, creating conflict.",
+          "Conservation programs work best when they include and support local communities."
+        ],
+        example:
+          "In some regions, villagers receive compensation when wild animals damage crops, reducing the chance of retaliatory killing.",
+        activity:
+          "Research one Indian animal that is threatened (for example: tiger, elephant, gharial, Great Indian bustard) and note where it lives and why it is in danger.",
+        reflection: [
+          "Why is it important to protect wildlife even if you live in a city?",
+          "How could schools help create awareness and support for conservation?"
+        ],
+        miniQuiz:
+          "🐾 Quick check: What is one main threat to wildlife in India, and one solution you learned about?"
+      }
+    };
+
+    function getLessonId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("id") || "climate-basics";
+    }
+
+    function renderLesson() {
+      const id = getLessonId();
+      const lesson = lessons[id] || lessons["climate-basics"];
+
+      const titleEl = document.getElementById("lesson-title");
+      const metaEl = document.getElementById("lesson-meta");
+      const contentEl = document.getElementById("lesson-content");
+
+      titleEl.textContent = lesson.title;
+      metaEl.innerHTML = `
+        <span class="chip">${lesson.sdg}</span>
+        <span class="chip">Duration: ${lesson.duration}</span>
+        <span class="chip">Level: ${lesson.level}</span>
+      `;
+
+      contentEl.innerHTML = `
+        <div class="content-section">
+          <h3>1. Lesson overview</h3>
+          <p>${lesson.summary}</p>
+        </div>
+
+        <div class="content-section">
+          <h3>2. Learning objectives</h3>
+          <ul>
+            ${lesson.objectives.map(obj => `<li>${obj}</li>`).join("")}
+          </ul>
+        </div>
+
+        <div class="content-section">
+          <h3>3. Key ideas</h3>
+          <ul>
+            ${lesson.keyIdeas.map(k => `<li>${k}</li>`).join("")}
+          </ul>
+          <div class="highlight-box">
+            <p><strong>Remember:</strong> these ideas connect directly to the SDGs and real decisions people make every day.</p>
+          </div>
+        </div>
+
+        <div class="content-section">
+          <h3>4. Real-world example</h3>
+          <p>${lesson.example}</p>
+        </div>
+
+        <div class="content-section">
+          <h3>5. Try this activity</h3>
+          <div class="activity-box">
+            <p>${lesson.activity}</p>
+          </div>
+        </div>
+
+        <div class="content-section">
+          <h3>6. Reflect & discuss</h3>
+          <ul>
+            ${lesson.reflection.map(r => `<li>${r}</li>`).join("")}
+          </ul>
+        </div>
+
+        <div class="content-section">
+          <h3>7. Mini self-check</h3>
+          <p class="mini-quiz">${lesson.miniQuiz}</p>
+          <p style="margin-top:8px;color:var(--text-secondary);">
+            You don’t have to type the answer here – just say it out loud or write it in your notebook to lock in your learning.
+          </p>
+        </div>
+      `;
+    }
+
+    renderLesson();
+  </script>
+</body>
+</html>

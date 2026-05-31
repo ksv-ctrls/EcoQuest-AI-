@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mini Games – EduQuest</title>
+
+<style>
+/* --- THEME VARIABLES --- */
+:root {
+  --bg-color: #0c0a1a;
+  --primary-card: #1a1829;
+  --secondary-card: #2a2837;
+  --accent-purple: #763bf3;
+  --accent-pink: #9b59b6;
+  --text-primary: #ffffff;
+  --text-secondary: #a9a6b8;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* GENERAL */
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  font-family: "Inter", sans-serif;
+  color: var(--text-primary);
+  padding: 40px 20px;
+  background-image: radial-gradient(
+    circle at top,
+    rgba(118, 59, 243, 0.25),
+    transparent 60%
+  );
+}
+
+/* PAGE TITLE */
+h1 {
+  text-align: center;
+  font-size: 2.6rem;
+  margin-bottom: 35px;
+  color: var(--text-primary);
+}
+
+/* GAME GRID */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 26px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* GAME CARD */
+.game-card {
+  background: var(--primary-card);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* GLOW EFFECT — does not block clicks */
+.game-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left,
+      rgba(118, 59, 243, 0.4),
+      transparent 70%);
+  opacity: 0;
+  transition: 0.4s;
+  pointer-events: none; /* IMPORTANT FIX */
+}
+
+.game-card:hover::before {
+  opacity: 1;
+}
+
+.game-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-purple);
+  box-shadow: 0 18px 45px rgba(118,59,243,0.8);
+}
+
+/* TITLE */
+.game-card h2 {
+  margin: 0 0 12px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* DESCRIPTION */
+.game-card p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 15px;
+}
+
+/* TAGS */
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--secondary-card);
+  border-radius: 8px;
+  margin-right: 6px;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  color: var(--accent-purple);
+  border: 1px solid var(--border-color);
+}
+
+/* PLAY BUTTON */
+.play-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  background-image: linear-gradient(to right,
+      var(--accent-purple),
+      var(--accent-pink),
+      var(--accent-purple));
+  background-size: 200% auto;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 10px 25px rgba(118,59,243,0.6);
+  position: relative;
+  z-index: 10; /* ensures hover & click works */
+}
+
+.play-btn:hover {
+  background-position: right center;
+  box-shadow: 0 14px 35px rgba(118,59,243,0.9);
+}
+/* Theme toggle button */
+.theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    background: var(--secondary-card);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+</style>
+
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<h1>🌱 Eco Mini Games</h1>
+
+<div class="game-grid">
+
+  <!-- Game 1 -->
+  <div class="game-card">
+    <h2>Eco Family Budget Challenge</h2>
+    <p>Manage money while keeping your family eco-friendly. Choose wisely!</p>
+    <span class="tag">Strategy</span>
+    <span class="tag">SDG 12</span>
+    <br /><br />
+    <button class="play-btn" onclick="window.location.href='family-budget.html'">
+      Play →
+    </button>
+  </div>
+
+  <!-- Game 2 -->
+  <div class="game-card">
+    <h2>Carbon Footprint Dash</h2>
+    <p>Pick low-carbon options quickly before the timer ends!</p>
+    <span class="tag">Arcade</span>
+    <span class="tag">Climate</span>
+    <br /><br />
+    <button class="play-btn" onclick="window.location.href='carbon-dash.html'">
+      Play →
+    </button>
+  </div>
+
+  <!-- Game 3 -->
+  <div class="game-card">
+    <h2>Zero-Waste Sorting Lab</h2>
+    <p>Sort waste into correct bins: recycle, compost, e-waste, reuse.</p>
+    <span class="tag">Puzzle</span>
+    <span class="tag">Waste</span>
+    <br /><br />
+    <button class="play-btn" onclick="window.location.href='waste-sorting.html'">
+      Play →
+    </button>
+  </div>
+
+  <!-- Game 4 -->
+  <div class="game-card">
+    <h2>City of Tomorrow Simulator</h2>
+    <p>Build a futuristic eco-city without exceeding CO₂ limits.</p>
+    <span class="tag">Simulation</span>
+    <span class="tag">SDG 11</span>
+    <br /><br />
+    <button class="play-btn" onclick="window.location.href='city-sim.html'">
+      Play →
+    </button>
+  </div>
+
+  <!-- Game 5 -->
+  <div class="game-card">
+    <h2>Biodiversity Rescue Quest</h2>
+    <p>Explore habitats, identify threats & protect key species.</p>
+    <span class="tag">Adventure</span>
+    <span class="tag">SDG 15</span>
+    <br /><br />
+    <button class="play-btn" onclick="window.location.href='biodiversity-quest.html'">
+      Play →
+    </button>
+  </div>
+
+</div>
+<script>
+  
+// Theme toggle
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EduQuest Tutor</title>
+    <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+    <div class="chat-layout">
+
+        <!-- Sidebar -->
+        <aside class="chat-sidebar">
+            <div class="bot-profile">
+                <img src="images/logo.png" class="bot-avatar" />
+                <h2>EduQuest Tutor</h2>
+                <p>Your AI companion for environmental learning.</p>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Quick Prompts</h3>
+                <button class="quick-btn" onclick="sendQuick('Explain SDG 13')">SDG 13 – Climate Action</button>
+                <button class="quick-btn" onclick="sendQuick('Tips to save water')">Water Saving Tips</button>
+                <button class="quick-btn" onclick="sendQuick('Renewable energy types')">Renewable Energy</button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>SDG Topics</h3>
+                <ul class="sdg-list">
+                    <li onclick="sendQuick('Tell me about biodiversity')">🌱 Biodiversity</li>
+                    <li onclick="sendQuick('How to reduce waste?')">♻ Waste Reduction</li>
+                    <li onclick="sendQuick('What is sustainable living?')">🌍 Sustainable Living</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Chat Window -->
+        <main class="chat-main">
+            <header class="chat-header">
+                <h2>EcoSDG Tutor</h2>
+            </header>
+
+            <div id="chat-body" class="chat-body"></div>
+
+            <footer class="chat-footer">
+                <input id="chat-input" type="text" placeholder="Ask something about SDGs..." />
+                <button onclick="sendMessage()">Send</button>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>

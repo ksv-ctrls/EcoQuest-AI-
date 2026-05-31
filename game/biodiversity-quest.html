@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Biodiversity Rescue Quest</title>
+
+<style>
+/* ---------- THEME VARIABLES ---------- */
+:root {
+  --bg-color: #0c0a1a;
+  --primary-card: #1a1829;
+  --secondary-card: #2a2837;
+  --accent-purple: #763bf3;
+  --accent-pink: #9b59b6;
+  --text-primary: #ffffff;
+  --text-secondary: #a9a6b8;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --hero-gradient: radial-gradient(
+    ellipse 55% 50% at 15% 20%,
+    rgba(118, 59, 243, 0.45),
+    transparent
+  );
+}
+
+body.light-theme {
+  --bg-color: #f0fdf4;
+  --primary-card: #ffffff;
+  --secondary-card: #e2f3e1;
+  --text-primary: #222222;
+  --text-secondary: #555555;
+  --border-color: rgba(0, 0, 0, 0.12);
+  --hero-gradient: radial-gradient(
+    ellipse 55% 50% at 15% 20%,
+    rgba(118, 59, 243, 0.18),
+    transparent
+  );
+}
+
+/* ---------- GLOBAL LAYOUT ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* keep content centered on big screens */
+.app-shell {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+}
+
+/* floating theme toggle */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--secondary-card);
+  color: var(--text-primary);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+}
+
+/* ---------- THREE-COLUMN LAYOUT ---------- */
+.quest-layout {
+  display: flex;
+  flex: 1;
+}
+
+/* LEFT: HABITATS */
+.habitat-panel {
+  width: 260px;
+  padding: 24px 20px;
+  border-right: 1px solid var(--border-color);
+  background-image: var(--hero-gradient);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.habitat-title {
+  font-size: 22px;
+  margin: 0;
+}
+
+.habitat-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.habitat-list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.habitat-btn {
+  width: 100%;
+  background: rgba(16, 14, 32, 0.9);
+  border-radius: 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.habitat-btn .emoji {
+  font-size: 18px;
+}
+
+.habitat-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 16px rgba(118, 59, 243, 0.6);
+}
+
+.habitat-btn.active {
+  border-color: var(--accent-pink);
+  box-shadow: 0 0 18px rgba(155, 89, 182, 0.9);
+}
+
+/* CENTER: MISSION PANEL */
+.mission-panel {
+  flex: 1.8;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.top-bar span {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.25);
+  font-size: 12px;
+}
+
+/* main mission card */
+.mission-card {
+  margin-top: 4px;
+  background: var(--primary-card);
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.mission-species {
+  background: var(--secondary-card);
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  text-align: center;
+}
+
+.species-emoji {
+  font-size: 34px;
+  margin-bottom: 6px;
+}
+
+.species-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.species-habitat {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.mission-heading {
+  font-size: 18px;
+  margin: 0 0 6px 0;
+}
+
+.mission-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 10px 0;
+  line-height: 1.5;
+}
+
+/* questions + options */
+.question-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 8px 0 4px;
+}
+
+.options-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.option-btn {
+  flex: 1 1 160px;
+  min-width: 140px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--secondary-card);
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.18s ease;
+}
+
+.option-btn:hover {
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 10px rgba(118, 59, 243, 0.5);
+  transform: translateY(-1px);
+}
+
+/* feedback / explanation */
+.feedback-line {
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.feedback-line strong {
+  font-weight: 600;
+}
+
+.explanation-box {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  border-left: 2px solid var(--accent-purple);
+  padding-left: 8px;
+}
+
+/* RIGHT: STATS PANEL */
+.stats-panel {
+  width: 300px;
+  padding: 24px 20px;
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stat-card {
+  background: var(--primary-card);
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  padding: 14px 16px;
+}
+
+.stat-label {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.progress-bar {
+  margin-top: 8px;
+  height: 7px;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--secondary-card);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background-image: linear-gradient(
+    to right,
+    var(--accent-purple),
+    var(--accent-pink)
+  );
+  transition: width 0.25s ease-out;
+}
+
+.log-list {
+  margin-top: 6px;
+  max-height: 170px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  overflow-y: auto;
+}
+
+.log-item {
+  margin-bottom: 6px;
+}
+
+/* animations for right/wrong */
+.option-btn.correct {
+  animation: correctPulse 0.4s ease-out;
+}
+
+.option-btn.wrong {
+  animation: wrongShake 0.28s ease-out;
+}
+
+@keyframes correctPulse {
+  0% {
+    box-shadow: 0 0 0 rgba(46, 204, 113, 0);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(46, 204, 113, 0.9);
+    transform: translateY(-1px);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(46, 204, 113, 0);
+  }
+}
+
+@keyframes wrongShake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1024px) {
+  .quest-layout {
+    flex-direction: column;
+  }
+  .habitat-panel,
+  .stats-panel {
+    width: 100%;
+    border-right: none;
+    border-left: none;
+  }
+  .mission-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+
+<div class="app-shell">
+  <div class="quest-layout">
+    <!-- LEFT: HABITATS -->
+    <aside class="habitat-panel">
+      <div>
+        <h1 class="habitat-title">Biodiversity Rescue Quest</h1>
+        <p class="habitat-subtitle">
+          Explore habitats, spot key species, identify threats and choose protection actions.
+        </p>
+      </div>
+      <div id="habitat-list" class="habitat-list"></div>
+    </aside>
+
+    <!-- CENTER: MISSION -->
+    <main class="mission-panel">
+      <div class="top-bar">
+        <span>Mission Stage: <strong id="stage-label">Threat Assessment</strong></span>
+        <span class="badge">Score: <span id="score">0</span></span>
+      </div>
+
+      <section class="mission-card">
+        <div class="mission-species">
+          <div id="species-emoji" class="species-emoji">🦋</div>
+          <div id="species-name" class="species-name">Loading...</div>
+          <div id="species-habitat" class="species-habitat">Habitat: —</div>
+        </div>
+
+        <div>
+          <h2 id="mission-heading" class="mission-heading">Field report</h2>
+          <p id="mission-text" class="mission-text"></p>
+
+          <div>
+            <div id="question-label" class="question-label"></div>
+            <div id="options-row" class="options-row"></div>
+          </div>
+
+          <p id="feedback" class="feedback-line"></p>
+          <div id="explanation" class="explanation-box" style="display:none;"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- RIGHT: STATS -->
+    <aside class="stats-panel">
+      <div class="stat-card">
+        <div class="stat-label">Lives</div>
+        <div id="lives" class="stat-value">❤️❤️❤️</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Habitats Explored</div>
+        <div id="explored-count" class="stat-value">0 / 6</div>
+        <div class="progress-bar">
+          <div id="explored-progress" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Mission Log</div>
+        <div id="mission-log" class="log-list"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const habitats = [
+  { id: "forest", name: "Forest", emoji: "🌳" },
+  { id: "ocean", name: "Ocean & Reefs", emoji: "🌊" },
+  { id: "wetland", name: "Wetlands", emoji: "🦆" },
+  { id: "grassland", name: "Grasslands", emoji: "🦁" },
+  { id: "river", name: "Rivers & Lakes", emoji: "🐟" },
+  { id: "mountain", name: "Mountains", emoji: "⛰️" }
+];
+
+const encounters = [
+  {
+    habitatId: "forest",
+    habitatName: "Tropical Rainforest",
+    species: "Orangutan",
+    emoji: "🦧",
+    briefing:
+      "You enter a dense rainforest where orangutans swing between the canopy. Their home depends on continuous forest cover.",
+    threatQuestion: "STEP 1 · IDENTIFY THE MAIN THREAT",
+    threatOptions: [
+      "Light eco-tourism",
+      "Palm oil-driven deforestation",
+      "Occasional rainfall"
+    ],
+    correctThreatIndex: 1,
+    actionQuestion: "STEP 2 · CHOOSE THE BEST PROTECTION ACTION",
+    actionOptions: [
+      "Support certified deforestation-free products",
+      "Build more roads to expand plantations",
+      "Capture orangutans and move them to zoos"
+    ],
+    correctActionIndex: 0,
+    explanation:
+      "Palm oil-driven deforestation destroys orangutan habitat. Choosing certified deforestation-free products reduces pressure on forests."
+  },
+  {
+    habitatId: "ocean",
+    habitatName: "Coral Reef",
+    species: "Clownfish & Reef Coral",
+    emoji: "🐠",
+    briefing:
+      "Bright fish weave through coral structures. The reef is a hotspot of biodiversity but extremely sensitive to warming and pollution.",
+    threatQuestion: "STEP 1 · IDENTIFY THE MAIN THREAT",
+    threatOptions: [
+      "Underwater photography",
+      "Ocean acidification and warming",
+      "Occasional snorkeling"
+    ],
+    correctThreatIndex: 1,
+    actionQuestion: "STEP 2 · CHOOSE THE BEST PROTECTION ACTION",
+    actionOptions: [
+      "Reduce global greenhouse gas emissions and local pollution",
+      "Break off corals as souvenirs",
+      "Dump cooling chemicals directly onto reefs"
+    ],
+    correctActionIndex: 0,
+    explanation:
+      "Climate change drives coral bleaching via warming and acidification. Cutting emissions and reducing local pollution helps reefs recover."
+  },
+  {
+    habitatId: "wetland",
+    habitatName: "Coastal Wetland",
+    species: "Mangroves & Shorebirds",
+    emoji: "🌱",
+    briefing:
+      "You walk along muddy ground where mangrove roots trap sediment and shorebirds feed, protecting coasts from storms.",
+    threatQuestion: "STEP 1 · IDENTIFY THE MAIN THREAT",
+    threatOptions: [
+      "Conversion to shrimp farms and construction",
+      "Bird photography",
+      "Low-impact boardwalks for visitors"
+    ],
+    correctThreatIndex: 0,
+    actionQuestion: "STEP 2 · CHOOSE THE BEST PROTECTION ACTION",
+    actionOptions: [
+      "Drain the wetland to build resorts",
+      "Declare it a protected area and restore mangroves",
+      "Cut mangroves for firewood"
+    ],
+    correctActionIndex: 1,
+    explanation:
+      "Mangroves protect coasts, store carbon, and host biodiversity. Protecting them legally and restoring damaged areas preserves these benefits."
+  },
+  {
+    habitatId: "grassland",
+    habitatName: "Savanna / Grassland",
+    species: "Elephants & Grassland Birds",
+    emoji: "🐘",
+    briefing:
+      "Open grasslands spread around you, with elephants roaming and birds nesting on the ground.",
+    threatQuestion: "STEP 1 · IDENTIFY THE MAIN THREAT",
+    threatOptions: [
+      "Poaching and habitat fragmentation",
+      "Traditional low-density grazing",
+      "Seasonal rainfall patterns"
+    ],
+    correctThreatIndex: 0,
+    actionQuestion: "STEP 2 · CHOOSE THE BEST PROTECTION ACTION",
+    actionOptions: [
+      "Strengthen anti-poaching patrols and wildlife corridors",
+      "Build fences that block animal migration",
+      "Ban all vegetation so animals move away"
+    ],
+    correctActionIndex: 0,
+    explanation:
+      "Poaching and fragmented habitats push elephants and other species toward extinction. Corridors and patrols reduce killings and allow safe movement."
+  },
+  {
+    habitatId: "river",
+    habitatName: "Freshwater River",
+    species: "River Dolphins & Fish",
+    emoji: "🐬",
+    briefing:
+      "A wide river flows past, hosting fish and river dolphins that rely on clean flowing water.",
+    threatQuestion: "STEP 1 · IDENTIFY THE MAIN THREAT",
+    threatOptions: [
+      "Plastic waste and untreated sewage",
+      "Careful catch-and-release fishing",
+      "Occasional riverbank picnics"
+    ],
+    correctThreatIndex: 0,
+    actionQuestion: "STEP 2 · CHOOSE THE BEST PROTECTION ACTION",
+    actionOptions: [
+      "Release untreated factory waste into the river",
+      "Improve wastewater treatment and reduce plastic pollution",
+      "Block the river entirely with dams"
+    ],
+    correctActionIndex: 1,
+    explanation:
+      "Pollution kills aquatic species and damages whole food webs. Wastewater treatment and reducing plastic use keep rivers alive and functioning."
+  },
+  {
+    habitatId: "mountain",
+    habitatName: "Mountain Forest",
+    species: "Snow Leopard",
+    emoji: "🐆",
+    briefing:
+      "High above the clouds, steep slopes host snow leopards and hardy plants adapted to the cold.",
+    threatQuestion: "STEP 1 · IDENTIFY THE MAIN THREAT",
+    threatOptions: [
+      "Illegal hunting and loss of prey",
+      "Quiet hiking trails",
+      "Seasonal snow cover"
+    ],
+    correctThreatIndex: 0,
+    actionQuestion: "STEP 2 · CHOOSE THE BEST PROTECTION ACTION",
+    actionOptions: [
+      "Work with local communities on wildlife-friendly livelihoods",
+      "Encourage unregulated trophy hunting",
+      "Remove prey so leopards move away"
+    ],
+    correctActionIndex: 0,
+    explanation:
+      "Snow leopards suffer from poaching and conflict with herders. Community-based conservation improves livelihoods and protects predators."
+  }
+];
+
+/* ---------- STATE ---------- */
+let score = 0;
+let lives = 3;
+let exploredHabitatIds = new Set();
+let currentEncounter = null;
+let stage = "threat"; // or "action"
+let locked = false;
+
+/* ---------- DOM SHORTCUTS ---------- */
+const habitatListEl = document.getElementById("habitat-list");
+const speciesEmojiEl = document.getElementById("species-emoji");
+const speciesNameEl = document.getElementById("species-name");
+const speciesHabitatEl = document.getElementById("species-habitat");
+const missionHeadingEl = document.getElementById("mission-heading");
+const missionTextEl = document.getElementById("mission-text");
+const questionLabelEl = document.getElementById("question-label");
+const optionsRowEl = document.getElementById("options-row");
+const feedbackEl = document.getElementById("feedback");
+const explanationEl = document.getElementById("explanation");
+const stageLabelEl = document.getElementById("stage-label");
+const scoreEl = document.getElementById("score");
+const livesEl = document.getElementById("lives");
+const exploredCountEl = document.getElementById("explored-count");
+const exploredProgressEl = document.getElementById("explored-progress");
+const logEl = document.getElementById("mission-log");
+
+/* ---------- INIT UI ---------- */
+function init() {
+  renderHabitatButtons();
+  loadRandomEncounter();
+  updateStats();
+}
+
+function renderHabitatButtons() {
+  habitatListEl.innerHTML = "";
+  habitats.forEach((h) => {
+    const btn = document.createElement("button");
+    btn.className = "habitat-btn";
+    btn.dataset.id = h.id;
+    btn.innerHTML = `<span class="emoji">${h.emoji}</span><span>${h.name}</span>`;
+    btn.addEventListener("click", () => loadEncounterForHabitat(h.id));
+    habitatListEl.appendChild(btn);
+  });
+}
+
+/* ---------- ENCOUNTER FLOW ---------- */
+function loadEncounterForHabitat(habitatId) {
+  const candidates = encounters.filter((e) => e.habitatId === habitatId);
+  currentEncounter =
+    candidates[Math.floor(Math.random() * candidates.length)] ||
+    encounters[Math.floor(Math.random() * encounters.length)];
+  stage = "threat";
+  locked = false;
+  refreshEncounterUI();
+}
+
+function loadRandomEncounter() {
+  const random = encounters[Math.floor(Math.random() * encounters.length)];
+  currentEncounter = random;
+  stage = "threat";
+  locked = false;
+  refreshEncounterUI();
+}
+
+function refreshEncounterUI() {
+  if (!currentEncounter) return;
+
+  // highlight sidebar
+  document.querySelectorAll(".habitat-btn").forEach((btn) => {
+    btn.classList.toggle(
+      "active",
+      btn.dataset.id === currentEncounter.habitatId
+    );
+  });
+
+  speciesEmojiEl.textContent = currentEncounter.emoji;
+  speciesNameEl.textContent = currentEncounter.species;
+  speciesHabitatEl.textContent = `Habitat: ${currentEncounter.habitatName}`;
+  missionHeadingEl.textContent = `Field report: ${currentEncounter.habitatName}`;
+  missionTextEl.textContent = currentEncounter.briefing;
+  feedbackEl.textContent = "";
+  explanationEl.style.display = "none";
+  explanationEl.textContent = "";
+
+  if (stage === "threat") {
+    stageLabelEl.textContent = "Threat Assessment";
+    questionLabelEl.textContent = currentEncounter.threatQuestion;
+    renderOptions(
+      currentEncounter.threatOptions,
+      currentEncounter.correctThreatIndex
+    );
+  } else {
+    stageLabelEl.textContent = "Protection Strategy";
+    questionLabelEl.textContent = currentEncounter.actionQuestion;
+    renderOptions(
+      currentEncounter.actionOptions,
+      currentEncounter.correctActionIndex
+    );
+  }
+}
+
+function renderOptions(options, correctIndex) {
+  optionsRowEl.innerHTML = "";
+  options.forEach((opt, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = opt;
+    btn.dataset.index = String(idx);
+    btn.addEventListener("click", () => handleOptionClick(idx, correctIndex));
+    optionsRowEl.appendChild(btn);
+  });
+}
+
+function handleOptionClick(chosenIndex, correctIndex) {
+  if (locked || !currentEncounter) return;
+  locked = true;
+
+  const buttons = Array.from(
+    optionsRowEl.querySelectorAll(".option-btn")
+  );
+  const chosenBtn = buttons[chosenIndex];
+
+  if (chosenIndex === correctIndex) {
+    chosenBtn.classList.add("correct");
+    const points = stage === "threat" ? 1 : 2;
+    score += points;
+    feedbackEl.innerHTML = `✅ Correct! <strong>+${points} pts</strong>`;
+
+    // mark habitat explored
+    exploredHabitatIds.add(currentEncounter.habitatId);
+
+    if (stage === "action") {
+      explanationEl.style.display = "block";
+      explanationEl.textContent = currentEncounter.explanation;
+      addLog(
+        `Protected ${currentEncounter.species} in ${currentEncounter.habitatName}.`
+      );
+      updateStats();
+      setTimeout(() => {
+        loadRandomEncounter();
+        updateStats();
+      }, 900);
+    } else {
+      updateStats();
+      setTimeout(() => {
+        stage = "action";
+        locked = false;
+        refreshEncounterUI();
+      }, 850);
+    }
+  } else {
+    chosenBtn.classList.add("wrong");
+    lives -= 1;
+    feedbackEl.innerHTML = `❌ Not quite. <strong>-1 life</strong>`;
+    if (stage === "action") {
+      explanationEl.style.display = "block";
+      explanationEl.textContent = currentEncounter.explanation;
+    }
+    updateStats();
+
+    setTimeout(() => {
+      if (lives <= 0) {
+        endGame();
+      } else {
+        loadRandomEncounter();
+        updateStats();
+      }
+    }, 850);
+  }
+}
+
+/* ---------- STATS / LOG ---------- */
+function updateStats() {
+  scoreEl.textContent = String(score);
+  livesEl.textContent = lives > 0 ? "❤️".repeat(lives) : "💔";
+
+  const exploredCount = exploredHabitatIds.size;
+  exploredCountEl.textContent = `${exploredCount} / ${habitats.length}`;
+  const percent = (exploredCount / habitats.length) * 100;
+  exploredProgressEl.style.width = `${percent}%`;
+}
+
+function addLog(text) {
+  const item = document.createElement("div");
+  item.className = "log-item";
+  item.textContent = text;
+  logEl.prepend(item);
+}
+
+function endGame() {
+  const exploredCount = exploredHabitatIds.size;
+  const msg =
+    `Mission over!\n\nHabitats explored: ${exploredCount}/${habitats.length}\nScore: ${score}\n\n` +
+    (score >= 10
+      ? "🌟 Great job! You made strong biodiversity decisions."
+      : "Keep training your biodiversity skills and try again!");
+  setTimeout(() => {
+    if (confirm(msg + "\n\nPlay again?")) {
+      location.reload();
+    }
+  }, 200);
+}
+
+/* ---------- THEME ---------- */
+function toggleTheme() {
+  document.body.classList.toggle("light-theme");
+}
+
+/* ---------- START ---------- */
+init();
+</script>
+
+</body>
+</html>

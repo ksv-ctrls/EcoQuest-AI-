@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduQuest Dashboard</title>
+  <style>
+  /* --- THEME VARIABLES (from your FIRST theme) --- */
+  :root {
+    --bg-color: #0c0a1a;
+    --primary-card: #1a1829;
+    --secondary-card: #2a2837;
+    --accent-purple: #763bf3;
+    --accent-pink: #9b59b6;
+    --text-primary: #ffffff;
+    --text-secondary: #a9a6b8;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --hero-gradient: radial-gradient(
+      ellipse 50% 40% at 50% 45%,
+      rgba(118, 59, 243, 0.4),
+      transparent
+    );
+  }
+
+  body.light-theme {
+    --bg-color: #f0fdf4;
+    --primary-card: #ffffff;
+    --secondary-card: #e2f3e1;
+    --accent-purple: #763bf3;
+    --accent-pink: #9b59b6;
+    --text-primary: #222222;
+    --text-secondary: #555555;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --hero-gradient: radial-gradient(
+      ellipse 50% 40% at 50% 45%,
+      rgba(118, 59, 243, 0.2),
+      transparent
+    );
+  }
+
+  /* --- GENERAL LAYOUT --- */
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    background-image: var(--hero-gradient);
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+    position: relative;
+    color: var(--text-primary);
+  }
+
+  body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    );
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* --- NAVBAR --- */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--primary-card);
+    padding: 0 36px;
+    height: 58px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    position: relative;
+    z-index: 2;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .logo {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+  }
+
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 8px 0;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    border-radius: 999px;
+    background-image: linear-gradient(
+      to right,
+      var(--accent-purple),
+      var(--accent-pink)
+    );
+    transition: width 0.25s ease;
+  }
+
+  .nav-links a.active,
+  .nav-links a:hover {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .nav-links a.active::after,
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  .user {
+    background: linear-gradient(
+      135deg,
+      var(--accent-purple),
+      var(--accent-pink)
+    );
+    color: #ffffff;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 4;
+    box-shadow: 0 0 18px rgba(118, 59, 243, 0.8);
+  }
+
+  /* --- MAIN DASHBOARD CARD --- */
+  .dashboard-container {
+    margin: 36px auto;
+    padding: 36px 30px 40px 30px;
+    border-radius: 20px;
+    background: var(--primary-card);
+    border: 1px solid var(--border-color);
+    max-width: 1100px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+    z-index: 1;
+    position: relative;
+  }
+
+  h1 {
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  h2 {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 28px;
+    margin-top: 0;
+  }
+
+  /* --- SUMMARY CARDS ROW --- */
+  .summary-row {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card {
+    background: var(--secondary-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 22px 28px;
+    min-width: 210px;
+    flex: 1 1 22%;
+    color: var(--text-primary);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 90px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+      border-color 0.2s ease;
+    font-size: 1rem;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(118, 59, 243, 0.6);
+    border-color: var(--accent-purple);
+  }
+
+  .card .stat-value {
+    color: #ffffff;
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+    text-align: left;
+    width: 100%;
+  }
+
+  .card .stat-label {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    font-weight: 500;
+    text-align: left;
+    width: 100%;
+  }
+
+  .card .note {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-align: left;
+    width: 100%;
+  }
+
+  /* --- MAIN GRID --- */
+  .main-content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    margin-top: 0;
+  }
+
+  .section {
+    background: var(--secondary-card);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .section h3 {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  /* --- CHALLENGES LIST --- */
+  .challenge-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 12px;
+  }
+
+  .challenge-item {
+    background: rgba(118, 59, 243, 0.08);
+    border: 1px solid rgba(118, 59, 243, 0.6);
+    border-radius: 10px;
+    padding: 14px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 1rem;
+  }
+
+  .challenge-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .challenge-meta {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    margin-bottom: 2px;
+  }
+
+  .challenge-difficulty {
+    background: var(--accent-purple);
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-left: 8px;
+    user-select: none;
+  }
+
+  .challenge-points {
+    color: var(--accent-pink);
+    margin-left: auto;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .challenge-btn {
+    align-self: flex-start;
+    margin-top: 7px;
+    background-image: linear-gradient(
+      to right,
+      var(--accent-purple),
+      var(--accent-pink),
+      var(--accent-purple)
+    );
+    background-size: 200% auto;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 18px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    font-size: 1rem;
+    box-shadow: 0 10px 24px rgba(118, 59, 243, 0.7);
+  }
+
+  .challenge-btn:hover {
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(118, 59, 243, 0.9);
+  }
+
+  /* --- LEVEL / PROGRESS --- */
+  .level-progress-bar {
+    width: 100%;
+    height: 16px;
+    background: var(--primary-card);
+    border-radius: 9px;
+    margin: 17px 0 7px 0;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+  }
+
+  .level-progress {
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      var(--accent-purple),
+      var(--accent-pink)
+    );
+    width: 65%;
+    border-radius: 9px 0 0 9px;
+    transition: width 0.4s;
+  }
+
+  .level-labels {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 0.97rem;
+  }
+
+  /* --- BADGES --- */
+  .badge-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .badge-earned {
+    background: rgba(118, 59, 243, 0.2);
+    color: var(--text-primary);
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 1rem;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid rgba(118, 59, 243, 0.7);
+  }
+
+  .badge-locked {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px dashed rgba(155, 89, 182, 0.6);
+    padding: 10px 14px;
+    border-radius: 7px;
+    opacity: 0.7;
+  }
+
+  /* --- QUICK ACTIONS --- */
+  .quick-actions {
+    display: flex;
+    gap: 22px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .quick-actions .quick-btn {
+    flex: 1;
+    min-width: 140px;
+    background-image: linear-gradient(
+      to right,
+      var(--accent-purple),
+      var(--accent-pink),
+      var(--accent-purple)
+    );
+    background-size: 200% auto;
+    color: #fff;
+    border-radius: 8px;
+    padding: 16px 0;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    font-size: 1rem;
+    margin-top: 8px;
+    box-shadow: 0 12px 26px rgba(118, 59, 243, 0.75);
+  }
+
+  .quick-actions .quick-btn:hover {
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px rgba(118, 59, 243, 0.95);
+  }
+
+  /* --- LESSON PROGRESS --- */
+  .lesson-progress-list {
+    max-height: 260px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-right: 12px;
+  }
+
+  .lesson-item {
+    background: var(--primary-card);
+    border-radius: 12px;
+    padding: 14px 18px;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+  }
+
+  .lesson-status {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* --- FLOATING CHATBOT BUTTON --- */
+  .chatbot-float {
+    position: fixed;
+    top: 60px;
+    left: 20px;
+    background-image: linear-gradient(
+      to right,
+      var(--accent-purple),
+      var(--accent-pink),
+      var(--accent-purple)
+    );
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    padding: 14px 20px;
+    box-shadow: 0 0 24px rgba(118, 59, 243, 0.9);
+    cursor: move;
+    z-index: 9999;
+    user-select: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+      background-position 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-size: 200% auto;
+  }
+  .chatbot-float button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chatbot-float button:focus {
+    outline: none;
+  }
+
+  .chatbot-float:hover {
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(118, 59, 243, 1);
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 950px) {
+    .dashboard-container {
+      max-width: 99vw;
+      padding: 26px 5vw 28px 5vw;
+    }
+    .main-content-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .dashboard-container {
+      padding: 10px 2vw;
+    }
+    .summary-row {
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card {
+      min-width: unset;
+    }
+    .quick-actions {
+      flex-direction: column;
+    }
+  }
+  </style>
+
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">EduQuest</div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="lessons.html">Lessons</a>
+      <a href="quiz.html">Quizzes</a>
+      <!-- UPDATED: link to game list -->
+      <a href="game/game-list.html">Fun Games</a>
+    </div>
+    <div class="user" title="Ksv">
+      <a href="profile.html" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; color: inherit; text-decoration: none;">
+        K
+      </a>
+    </div>
+  </div>
+
+  <div class="chatbot-float" title="Ask questions or clarify doubts on lessons and quizzes">
+    <button onclick="window.location.href='http://127.0.0.1:5000'">💬 AI Tutor</button>
+  </div>
+
+  <div class="dashboard-container">
+    <h1>Welcome back, Ksv! <span style="font-size:1.3rem;">🌱</span></h1>
+    <h2>You're making great progress on your environmental journey!</h2>
+
+    <div class="summary-row">
+      <div class="card">
+        <span class="stat-label">Total Eco-Points</span>
+        <span class="stat-value">1,250</span>
+        <span class="note">Level 8 · Rank #23</span>
+      </div>
+      <div class="card">
+        <span class="stat-label">Lessons Completed</span>
+        <span class="stat-value" style="text-align: left;">18</span>
+        <span class="note" style="text-align: left;">Out of 30 lessons</span>
+      </div>
+      <div class="card">
+        <span class="stat-label">Quizzes Completed</span>
+        <span class="stat-value">12</span>
+        <span class="note">Including mini-games</span>
+      </div>
+      <div class="card">
+        <span class="stat-label">Fun Games Played</span>
+        <span class="stat-value">6</span>
+        <span class="note">What-if scenario games</span>
+      </div>
+    </div>
+
+    <div class="main-content-grid">
+      <div>
+        <div class="section">
+          <h3>Lessons Progress - Environmental & SDG Topics</h3>
+          <div class="lesson-progress-list">
+            <div class="lesson-item">
+              Climate Change Basics
+              <span class="lesson-status">Completed</span>
+            </div>
+            <div class="lesson-item">
+              Biodiversity & Habitat Conservation
+              <span class="lesson-status">In Progress</span>
+            </div>
+            <div class="lesson-item">
+              Waste Management Techniques
+              <span class="lesson-status">Not Started</span>
+            </div>
+            <div class="lesson-item">
+              Water Conservation Strategies
+              <span class="lesson-status">Completed</span>
+            </div>
+            <div class="lesson-item">
+              Renewable Energy Sources
+              <span class="lesson-status">Completed</span>
+            </div>
+            <div class="lesson-item">
+              Sustainable Cities & Communities
+              <span class="lesson-status">In Progress</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Active Challenges</h3>
+          <div class="challenge-list">
+            <div class="challenge-item">
+              <div class="challenge-title">
+                Water Conservation Week
+                <span class="challenge-difficulty">Easy</span>
+                <span class="challenge-points">150 pts</span>
+              </div>
+              <div class="challenge-meta">Track and reduce your water usage for 7 days</div>
+              <button class="challenge-btn">Start</button>
+            </div>
+            <div class="challenge-item">
+              <div class="challenge-title">
+                Plastic-Free Campus Challenge
+                <span class="challenge-difficulty" style="background:#ffd70020; color:#ffd700;">Medium</span>
+                <span class="challenge-points">300 pts</span>
+              </div>
+              <div class="challenge-meta">Organize a plastic-free day in your school</div>
+              <button class="challenge-btn">Start</button>
+            </div>
+            <div class="challenge-item">
+              <div class="challenge-title">
+                Local Wildlife Documentation
+                <span class="challenge-difficulty" style="background:#ffd70020; color:#ffd700;">Medium</span>
+                <span class="challenge-points">200 pts</span>
+              </div>
+              <div class="challenge-meta">Document 10 local species and their habitats</div>
+              <button class="challenge-btn">Start</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Quick Actions</h3>
+          <div class="quick-actions">
+            <button class="quick-btn" onclick="window.location.href='lessons.html'">Browse Lessons</button>
+            <button class="quick-btn" onclick="window.location.href='quiz.html'">Browse Quizzes</button>
+            <!-- UPDATED: this goes to game list -->
+            <button class="quick-btn" onclick="window.location.href='game/game-list.html'">
+              Browse Fun Games
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section">
+          <h3>Level Progress</h3>
+          <div class="level-labels"><span>Level 8</span><span>Level 9</span></div>
+          <div class="level-progress-bar">
+            <div class="level-progress" style="width:65%;"></div>
+          </div>
+          <div class="note" style="margin-top:8px;">350 more points to reach Level 9</div>
+        </div>
+
+        <div class="section">
+          <h3>Your Badges</h3>
+          <div class="badge-list">
+            <div class="badge-earned">💧 Water Warrior
+              <span style="font-size:0.9rem; color:#b9d0c1;">Completed 5 water conservation challenges</span>
+            </div>
+            <div class="badge-earned">🌱 Eco Explorer
+              <span style="font-size:0.9rem; color:#b9d0c1;">Documented 50 local species</span>
+            </div>
+            <div class="badge-locked">♻️ Waste Fighter
+              <span style="font-size:0.9rem;">Reduced waste by 50%</span>
+            </div>
+            <div class="badge-locked">🏅 Green Leader
+              <span style="font-size:0.9rem;">Led 3 environmental initiatives</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Weekly Goal</h3>
+          <div class="note">Complete 3 challenges</div>
+          <div class="stat-value" style="font-size:1.36rem; margin-top:0.6rem;">
+            2<span style="color:#ffd700;">/3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const chatbot = document.querySelector('.chatbot-float');
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    chatbot.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      offsetX = e.clientX - chatbot.getBoundingClientRect().left;
+      offsetY = e.clientY - chatbot.getBoundingClientRect().top;
+      chatbot.style.transition = 'none';
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      chatbot.style.transition = 'background-color 0.25s ease, color 0.25s ease';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        let left = e.clientX - offsetX;
+        let top = e.clientY - offsetY;
+
+        left = Math.max(10, Math.min(left, window.innerWidth - chatbot.offsetWidth - 10));
+        top = Math.max(10, Math.min(top, window.innerHeight - chatbot.offsetHeight - 10));
+
+        chatbot.style.left = left + 'px';
+        chatbot.style.top = top + 'px';
+      }
+    });
+  </script>
+</body>
+</html>

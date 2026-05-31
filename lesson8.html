@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson 8 • Wildlife Threats in India • EduQuest</title>
+
+  <style>
+    :root {
+      --bg-color: #0c0a1a;
+      --primary-card: #1a1829;
+      --secondary-card: #2a2837;
+      --accent-purple: #763bf3;
+      --accent-pink: #9b59b6;
+      --text-primary: #ffffff;
+      --text-secondary: #a9a6b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-color);
+      font-family: "Inter", sans-serif;
+      color: var(--text-primary);
+      padding-bottom: 40px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: var(--primary-card);
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo { font-size: 1.4rem; font-weight: 600; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 1rem;
+      position: relative;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* PAGE LAYOUT */
+    .page-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .back-btn {
+      margin-bottom: 16px;
+      padding: 8px 14px;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      color: #fff;
+      border-color: var(--accent-purple);
+    }
+
+    /* HEADER */
+    .lesson-header {
+      background: var(--primary-card);
+      padding: 26px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      margin-bottom: 24px;
+    }
+    .lesson-title { font-size: 1.8rem; margin: 0 0 10px; }
+    .lesson-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .chip {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+
+    /* CONTENT */
+    .section {
+      background: var(--secondary-card);
+      padding: 18px 22px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 20px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+    }
+    h3 { margin-top: 0; }
+    p, li { color: var(--text-secondary); line-height: 1.6; }
+
+    ul { margin: 8px 0 8px 20px; }
+
+    .highlight {
+      border-left: 3px solid var(--accent-purple);
+      padding-left: 10px;
+      margin-top: 10px;
+    }
+
+    .activity-box {
+      border: 1px dashed var(--accent-purple);
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(118, 59, 243, 0.08);
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo">EcoGamifiedEdu</div>
+    <div class="nav-links">
+      <a href="../dashboard.html">Dashboard</a>
+      <a href="../lessons.html" class="active">Lessons</a>
+      <a href="../quiz.html">Quizzes</a>
+      <a href="../game/game-list.html">Fun Games</a>
+    </div>
+  </div>
+
+  <div class="page-container">
+
+    <button class="back-btn" onclick="window.location.href='../lessons.html'">
+      ← Back to Lessons
+    </button>
+
+    <!-- HEADER -->
+    <div class="lesson-header">
+      <h1 class="lesson-title">Lesson 8: Wildlife Threats in India</h1>
+      <div class="lesson-meta">
+        <span class="chip">SDG 15 – Life on Land</span>
+        <span class="chip">Duration: 12 mins</span>
+        <span class="chip">Level: Intermediate</span>
+      </div>
+    </div>
+
+    <!-- LESSON CONTENT -->
+    <div class="section">
+      <h3>1. Lesson Overview</h3>
+      <p>
+        India is home to some of the world’s most unique and endangered wildlife.
+        But many species face threats from habitat loss, poaching, and conflict
+        with humans. This lesson explores the major risks and how communities and
+        conservation groups can protect wildlife.
+      </p>
+    </div>
+
+    <div class="section">
+      <h3>2. Learning Objectives</h3>
+      <ul>
+        <li>Identify at least two threatened species in India.</li>
+        <li>Explain how human activities lead to wildlife conflict.</li>
+        <li>Suggest ways to protect wildlife through community participation.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>3. Key Ideas</h3>
+      <ul>
+        <li>Habitat destruction, poaching, and pollution are major threats.</li>
+        <li>Conflicts occur when animals move into human settlements looking for food or space.</li>
+        <li>Conservation succeeds when communities actively participate.</li>
+      </ul>
+
+      <div class="highlight">
+        <p><strong>Note:</strong> Wildlife conservation is not only about protecting animals — it protects entire ecosystems.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>4. Real-World Example</h3>
+      <p>
+        In parts of India, villagers receive compensation when wildlife damages crops.
+        This discourages harmful retaliation and encourages coexistence.
+      </p>
+    </div>
+
+    <div class="section">
+      <h3>5. Activity</h3>
+      <div class="activity-box">
+        Research one Indian endangered animal (tiger, elephant, gharial, rhinoceros, etc).  
+        Write down where it lives and why it is threatened.
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>6. Reflect & Discuss</h3>
+      <ul>
+        <li>Why protect wildlife even if you live in a city?</li>
+        <li>How can schools help spread awareness about endangered species?</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>7. Mini Self-Check</h3>
+      <p><strong>🐾 Quick Check:</strong> What is one major threat to wildlife in India and one solution?</p>
+      <p style="color:var(--text-secondary); margin-top:6px;">
+        Think or write your answer — no need to submit.
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Budget Challenge</title>
+    <style>
+    /* --- General Styles & Theme --- */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+        --bg-color: #0c0a1a;
+        --primary-card: #1a1829;
+        --secondary-card: #2a2837;
+        --accent-purple: #763bf3;
+        --accent-pink: #9b59b6;
+        --text-primary: #ffffff;
+        --text-secondary: #a9a6b8;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --success-color: #28a745;
+        --warning-color: #ffc107;
+        --danger-color: #dc3545;
+        --hero-gradient: radial-gradient(
+            ellipse 50% 40% at 50% 45%,
+            rgba(118, 59, 243, 0.4),
+            transparent
+        );
+    }
+
+    body.light-theme {
+        --bg-color: #f0fdf4;
+        --primary-card: #ffffff;
+        --secondary-card: #e2f3e1;
+        --accent-purple: #763bf3;
+        --accent-pink: #9b59b6;
+        --text-primary: #222222;
+        --text-secondary: #555555;
+        --border-color: rgba(0, 0, 0, 0.1);
+        --hero-gradient: radial-gradient(
+            ellipse 50% 40% at 50% 45%,
+            rgba(118, 59, 243, 0.2),
+            transparent
+        );
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-color);
+        background-image: var(--hero-gradient);
+        color: var(--text-primary);
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        box-sizing: border-box;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+        );
+        background-size: 60px 60px;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* --- Game Header --- */
+    .game-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 1000px;
+        margin-bottom: 20px;
+        background: var(--primary-card);
+        padding: 15px 25px;
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+        position: relative;
+        z-index: 1;
+    }
+
+    .budget-display {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--success-color);
+        transition: color 0.3s;
+    }
+    .budget-display.warning { color: var(--warning-color); }
+    .budget-display.danger { color: var(--danger-color); }
+
+    .family-avatars {
+        display: flex;
+        gap: 10px;
+    }
+    .family-avatars span {
+        font-size: 32px;
+        filter: drop-shadow(0 0 10px rgba(118, 59, 243, 0.6));
+    }
+
+    /* --- Game Zones --- */
+    .game-container {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        max-width: 1000px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .items-pool, .needs-container {
+        width: 50%;
+        padding: 20px;
+        border-radius: 20px;
+        background: var(--primary-card);
+        border: 1px solid var(--border-color);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+        box-sizing: border-box;
+    }
+
+    .drop-zone {
+        min-height: 200px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-content: flex-start;
+        margin-top: 10px;
+    }
+    
+    .needs-zone {
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    /* --- Item & Need Cards --- */
+    .item-card {
+        padding: 10px 15px;
+        background-color: var(--secondary-card);
+        border-radius: 10px;
+        cursor: grab;
+        text-align: center;
+        border: 1px solid var(--border-color);
+        transition: background-color 0.25s ease, box-shadow 0.25s ease,
+                    transform 0.2s ease, border-color 0.25s ease;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+        min-width: 120px;
+    }
+
+    .item-card .item-name { 
+        font-weight: 600; 
+        margin-bottom: 4px;
+    }
+    .item-card .item-cost { 
+        color: var(--text-secondary); 
+        font-size: 0.9rem;
+    }
+
+    .need-slot {
+        padding: 15px;
+        background: var(--secondary-card);
+        border-radius: 10px;
+        border: 2px dashed var(--border-color);
+        transition: all 0.3s;
+    }
+
+    .need-slot.filled {
+        border-style: solid;
+        border-color: var(--success-color);
+        background-color: rgba(40, 167, 69, 0.18);
+        box-shadow: 0 10px 24px rgba(40, 167, 69, 0.4);
+    }
+
+    /* --- Modal --- */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(12, 10, 26, 0.7);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: var(--primary-card);
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.75);
+        max-width: 450px;
+    }
+
+    .modal-button {
+        background-image: linear-gradient(
+            to right,
+            var(--accent-purple),
+            var(--accent-pink),
+            var(--accent-purple)
+        );
+        background-size: 200% auto;
+        color: var(--text-primary);
+        padding: 12px 25px;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+    </style>
+
+</head>
+<body>
+
+    <div class="game-header">
+        <div class="family-avatars">
+            <span>👨‍👩‍👧‍👦</span>
+            <p>Family of 4</p>
+        </div>
+        <div class="budget-display" id="budget-display">₹50</div>
+    </div>
+
+    <div class="game-container">
+        <div class="items-pool">
+            <h2>Items to Choose</h2>
+            <div id="items-zone" class="drop-zone"></div>
+        </div>
+
+        <div class="needs-container">
+            <h2>Your Family's Budget</h2>
+            <div id="needs-zone" class="needs-zone"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="feedback-modal">
+        <div class="modal-content">
+            <h2 id="modal-title"></h2>
+            <p id="modal-message"></p>
+            <p id="modal-score"></p>
+            <a href="dashboard.html" class="modal-button">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const budgetDisplay = document.getElementById('budget-display');
+        const itemsZone = document.getElementById('items-zone');
+        const needsZone = document.getElementById('needs-zone');
+        const modal = document.getElementById('feedback-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalScore = document.getElementById('modal-score');
+
+        let budget = 2700;
+        let needsMet = 0;
+        const totalNeeds = 5;
+        let startTime = Date.now();
+
+        const items = [
+            { id: 'need1', name: 'Rice', cost: 100, type: 'need' },
+            { id: 'need2', name: 'Clean Water', cost: 20, type: 'need' },
+            { id: 'need3', name: 'Rent', cost: 1500, type: 'need' },
+            { id: 'need4', name: 'Medicine', cost: 80, type: 'need' },
+            { id: 'need5', name: 'School', cost: 1000, type: 'need' },
+            { id: 'want1', name: 'Toys', cost: 80, type: 'want' },
+            { id: 'want2', name: 'Fast Food', cost: 150, type: 'want' },
+            { id: 'want3', name: 'Gaming', cost: 200, type: 'want' },
+            { id: 'want4', name: 'New Clothes', cost: 250, type: 'want' }
+        ];
+
+        function initializeGame() {
+            items.forEach(item => {
+                const card = createItemCard(item);
+                itemsZone.appendChild(card);
+            });
+
+            items.filter(i => i.type === 'need').forEach(need => {
+                const slot = document.createElement('div');
+                slot.classList.add('need-slot');
+                slot.dataset.needId = need.id;
+                slot.innerHTML = `<span>${need.name}</span>`;
+                needsZone.appendChild(slot);
+            });
+
+            updateBudget();
+        }
+
+        function createItemCard(item) {
+            const card = document.createElement('div');
+            card.id = item.id;
+            card.classList.add('item-card');
+            card.draggable = true;
+            card.dataset.cost = item.cost;
+            card.dataset.type = item.type;
+            card.innerHTML = `
+                <div class="item-name">${item.name}</div>
+                <div class="item-cost">₹${item.cost}</div>
+            `;
+            card.addEventListener('dragstart', handleDragStart);
+            return card;
+        }
+
+        let draggedItem = null;
+
+        function handleDragStart(e) {
+            draggedItem = e.target;
+            e.dataTransfer.setData('text/plain', e.target.id);
+            setTimeout(() => draggedItem.classList.add('dragging'), 0);
+        }
+
+        needsZone.addEventListener('dragover', e => e.preventDefault());
+        needsZone.addEventListener('drop', handleDrop);
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (!draggedItem) return;
+
+            const cost = parseInt(draggedItem.dataset.cost);
+            const type = draggedItem.dataset.type;
+
+            if (budget >= cost) {
+                budget -= cost;
+
+                if (type === 'need') {
+                    const targetSlot = needsZone.querySelector(
+                        `[data-need-id="${draggedItem.id}"]`
+                    );
+
+                    if (targetSlot && !targetSlot.classList.contains('filled')) {
+                        targetSlot.appendChild(draggedItem);
+                        targetSlot.classList.add('filled');
+                        needsMet++;
+                    }
+                } else {
+                    needsZone.appendChild(draggedItem);
+                }
+
+                draggedItem.draggable = false;
+                draggedItem.style.cursor = "default";
+                updateBudget();
+                checkWinCondition();
+            } else {
+                alert("Not enough money in the budget!");
+            }
+
+            draggedItem.classList.remove('dragging');
+            draggedItem = null;
+        }
+
+        function updateBudget() {
+            budgetDisplay.textContent = `₹${budget}`;
+            budgetDisplay.classList.remove('warning', 'danger');
+            if (budget < 15) budgetDisplay.classList.add('warning');
+            if (budget < 0) budgetDisplay.classList.add('danger');
+        }
+
+        function checkWinCondition() {
+            if (needsMet === totalNeeds) {
+                endGame(true);
+            } else if (itemsZone.children.length === 0 && needsMet < totalNeeds) {
+                endGame(false, "You ran out of money before meeting all needs.");
+            }
+        }
+
+        function endGame(isWin, message = "") {
+            let score = 0;
+
+            if (isWin) {
+                score = 500 + budget * 10;
+                modalTitle.textContent = "Congratulations!";
+                modalMessage.textContent = "You successfully managed the family budget and met all essential needs!";
+                modalScore.textContent = `You earned ${score} XP!`;
+                localStorage.setItem('gameXpEarned', score);
+            } else {
+                modalTitle.textContent = "Challenge Failed";
+                modalMessage.textContent = message;
+                modalScore.textContent = "Try again!";
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        initializeGame();
+    });
+    </script>
+
+</body>
+</html>

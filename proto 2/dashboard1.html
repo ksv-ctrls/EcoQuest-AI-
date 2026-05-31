@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnQuest Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/logo.png" alt="LearnQuest Logo">
+                <h2>LearnQuest</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="#"><span>🏠</span> Dashboard</a></li>
+                    <li><a href="#"><span>🚀</span> LearnQuest</a></li>
+                    <li><a href="#"><span>📜</span> Certificate</a></li>
+                    <li><a href="#"><span>📚</span> Lessons</a></li>
+                    <li><a href="#"><span>👨‍🎓</span> Students</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="lesson.html" class="sdg-goal-link">
+                    <img src="images/sdg.png" alt="SDG Goal 1: No Poverty">
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- User Profile Header -->
+            <header class="profile-header">
+                <div class="user-info">
+                    <img src="images/profile.jpg" alt="User Profile Picture" class="profile-pic">
+                    <div class="user-details">
+                        <div class="user-name-wrapper">
+                            <span class="user-name">Garreth Fluers</span>
+                            <img src="images/badge.png" alt="User Badge" class="user-badge">
+                        </div>
+                        <span class="user-level">Level 1</span>
+                    </div>
+                </div>
+                <div class="xp-scoreboard">
+                    <div class="xp-label">
+                        <span>XP</span>
+                        <span>0 / 2,000</span>
+                    </div>
+                    <div class="xp-bar">
+                        <div class="xp-progress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <button class="theme-toggle-btn" id="theme-toggle">
+                    <span class="sun-icon">☀️</span>
+                    <span class="moon-icon" style="display: none;">🌙</span>
+                </button>
+            </header>
+
+            <!-- Lessons Section -->
+            <section class="lessons-section">
+                <div class="section-header">
+                    <h3>Lesson</h3>
+                </div>
+                <div class="journey-start">
+                    <p>Ready to make a difference? Begin your learning journey on the SDGs now!</p>
+                    <a href="lesson.html" class="start-journey-btn">Start My Journey</a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Rewards Column -->
+        <aside class="rewards-column">
+             <div class="section-header">
+                <h3>Rewards</h3>
+            </div>
+            <div class="rewards-list">
+                <div class="reward-item">
+                    <img src="images/cup.jpeg" alt="Reward Icon">
+                    <div class="reward-details">
+                        <p>Gaming Cards</p>
+                        <div class="reward-progress-bar">
+                            <div class="reward-progress" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reward-item">
+                    <img src="images/reward.png" alt="Reward Icon">
+                    <div class="reward-details">
+                        <p>Progress Card</p>
+                        <div class="reward-progress-bar">
+                             <div class="reward-progress" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="reward-item">
+                    <img src="images/award.jpg" alt="Reward Icon">
+                    <div class="reward-details">
+                        <p>Sergeant Achievement</p>
+                        <div class="reward-progress-bar">
+                             <div class="reward-progress" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Bottom Navigation for Mobile -->
+        <footer class="bottom-nav">
+            <a href="#">Home</a>
+            <a href="#">Lessons</a>
+            <a href="#">Rewards</a>
+            <a href="#">Profile</a>
+        </footer>
+    </div>
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <h3>EcoBot 🌱</h3>
+                <button class="close-chat-btn" id="close-chat-btn">&times;</button>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <div class="chat-message bot">Hello! I'm EcoBot. How can I help you on your learning journey today?</div>
+            </div>
+            <div class="chat-footer">
+                <form id="chat-form">
+                    <input type="text" id="chat-input" placeholder="Ask me anything..." autocomplete="off">
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+        <button class="chatbot-fab" id="chatbot-fab">🤖</button>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson 2 • Biodiversity & Habitat Conservation</title>
+  <style>
+    /* same CSS as lesson1 */
+    :root {
+      --bg-color: #0c0a1a;
+      --primary-card: #1a1829;
+      --secondary-card: #2a2837;
+      --accent-purple: #763bf3;
+      --accent-pink: #9b59b6;
+      --text-primary: #ffffff;
+      --text-secondary: #a9a6b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --hero-gradient: radial-gradient(
+        ellipse 50% 40% at 50% 45%,
+        rgba(118, 59, 243, 0.4),
+        transparent
+      );
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", system-ui, sans-serif;
+      background-color: var(--bg-color);
+      background-image: var(--hero-gradient);
+      color: var(--text-primary);
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--primary-card);
+      padding: 0 36px;
+      height: 58px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .logo { font-weight: 600; font-size: 1.5rem; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 1rem;
+      position: relative;
+      padding: 8px 0;
+    }
+    .nav-links a.active,
+    .nav-links a:hover {
+      color: #fff;
+      font-weight: 600;
+    }
+    .nav-links a.active::after,
+    .nav-links a:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      height: 2px;
+      width: 100%;
+      border-radius: 999px;
+      background-image: linear-gradient(
+        to right,
+        var(--accent-purple),
+        var(--accent-pink)
+      );
+    }
+    .page-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .lesson-header-card {
+      background: var(--primary-card);
+      border-radius: 18px;
+      padding: 22px 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+      margin-bottom: 22px;
+    }
+    .lesson-title {
+      font-size: 1.7rem;
+      margin: 0 0 4px 0;
+    }
+    .lesson-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: rgba(0,0,0,0.3);
+      font-size: 0.8rem;
+    }
+    .back-btn {
+      margin-bottom: 16px;
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      border-color: var(--accent-purple);
+      color: #fff;
+    }
+    .content-section {
+      background: var(--secondary-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.5);
+    }
+    .content-section h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.1rem;
+    }
+    .content-section p {
+      margin: 6px 0;
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    ul {
+      margin: 6px 0 6px 20px;
+      padding: 0;
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+    }
+    li { margin-bottom: 4px; }
+    .highlight-box {
+      border-left: 3px solid var(--accent-purple);
+      padding-left: 10px;
+      margin-top: 8px;
+    }
+    .activity-box {
+      border-radius: 14px;
+      border: 1px dashed rgba(118,59,243,0.7);
+      padding: 12px 14px;
+      margin-top: 6px;
+      background: rgba(118,59,243,0.1);
+    }
+    .mini-quiz { margin-top: 10px; font-size: 0.96rem; }
+    .mini-quiz strong { color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">EduQuest</div>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="lessons.html" class="active">Lessons</a>
+      <a href="quiz.html">Quizzes</a>
+      <a href="game/game-list.html">Fun Games</a>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <button class="back-btn" onclick="window.location.href='lessons.html'">
+      ← Back to all lessons
+    </button>
+
+    <div class="lesson-header-card">
+      <h1 class="lesson-title">Lesson 2: Biodiversity & Habitat Conservation</h1>
+      <div class="lesson-meta">
+        <span class="chip">SDG 14 & SDG 15 – Life Below Water & Life on Land</span>
+        <span class="chip">Duration: 20 mins</span>
+        <span class="chip">Level: Intermediate</span>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>1. Lesson overview</h3>
+      <p>
+        This lesson explores the variety of life on Earth (biodiversity), why it matters for humans and ecosystems, and how 
+        habitat loss and pollution threaten species. You will also learn how conservation efforts can protect habitats.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h3>2. Learning objectives</h3>
+      <ul>
+        <li>Define biodiversity in simple words.</li>
+        <li>List at least two reasons why biodiversity is important for humans.</li>
+        <li>Explain how deforestation or pollution can reduce biodiversity.</li>
+      </ul>
+    </div>
+
+    <div class="content-section">
+      <h3>3. Key ideas</h3>
+      <ul>
+        <li>
+          <strong>What is biodiversity?</strong> It includes animals, plants, fungi and microorganisms, and the 
+          ecosystems they form together (forests, wetlands, coral reefs, grasslands, etc.).
+        </li>
+        <li>
+          <strong>Why it matters:</strong> Healthy ecosystems provide us with clean air, water, food, medicines, 
+          climate regulation and protection from disasters.
+        </li>
+        <li>
+          <strong>Threats:</strong> Habitat destruction, overuse of resources, pollution, invasive species and climate change 
+          can all reduce biodiversity and push species toward extinction.
+        </li>
+      </ul>
+      <div class="highlight-box">
+        <p>
+          When mangrove forests are cleared for shrimp farms or construction, fish nurseries disappear, 
+          shorebirds lose feeding areas and coasts become more vulnerable to storms and erosion.
+        </p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>4. Real-world example</h3>
+      <p>
+        In many coastal regions, mangrove forests act as natural barriers against cyclones and tsunamis. 
+        Where mangroves were preserved, nearby villages often suffer less damage. 
+        Where mangroves were destroyed, storms hit with full force, causing more loss of life and property.
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h3>5. Try this activity</h3>
+      <div class="activity-box">
+        <p>
+          Choose one local ecosystem near you (a lake, field, forest patch, park or even your school garden). 
+          Spend 15–20 minutes observing carefully and list at least 5 different species you see –
+          including plants, insects, birds or animals. Note how they might be connected (who eats whom, who needs shade, etc.).
+        </p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>6. Reflect & discuss</h3>
+      <ul>
+        <li>Which species in your area seem to be declining or rarely seen now compared to earlier years?</li>
+        <li>What simple action could your school or community take to protect a nearby habitat (for example, a cleanup, awareness poster, or tree planting)?</li>
+      </ul>
+    </div>
+
+    <div class="content-section">
+      <h3>7. Mini self-check</h3>
+      <p class="mini-quiz">
+        🦋 <strong>Quick check:</strong> Why is habitat loss such a serious problem for biodiversity?
+      </p>
+      <p style="margin-top:8px;color:var(--text-secondary);">
+        Answer in your own words, speaking or writing, to help the concept stay in your memory.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
