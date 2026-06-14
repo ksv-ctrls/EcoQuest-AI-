@@ -1,9 +1,11 @@
-import { Sparkles } from 'lucide-react'
+import { LogOut, Sparkles } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { SidebarMobileToggle } from '@/components/layout/Sidebar'
 import { mockUser } from '@/data/mock/user'
 import { getRouteMeta } from '@/data/navigation'
 import { cn } from '@/lib/cn'
+import { useAuth } from '@/context/AuthContext'
 
 interface NavbarProps {
   pathname: string
@@ -12,6 +14,13 @@ interface NavbarProps {
 
 export function Navbar({ pathname, onMenuOpen }: NavbarProps) {
   const meta = getRouteMeta(pathname)
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   return (
     <header className="sticky top-0 z-30 border-b border-cream/10 bg-primary-dark/95 backdrop-blur">
@@ -35,17 +44,24 @@ export function Navbar({ pathname, onMenuOpen }: NavbarProps) {
           >
             <Sparkles className="size-4 text-gold" />
             <span className="text-sm font-semibold text-cream">
-              {mockUser.ecoPoints.toLocaleString()}
+              {user?.ecoCoins?.toLocaleString() || mockUser.ecoPoints.toLocaleString()}
             </span>
             <span className="text-xs text-sage">eco-pts</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <Avatar initials={mockUser.initials} />
+            <Avatar initials={user?.name?.split(' ').map(n => n[0]).join('') || mockUser.initials} />
             <div className="hidden md:block">
-              <p className="text-sm font-medium text-cream">{mockUser.displayName}</p>
-              <p className="text-xs text-sage">Level {mockUser.level}</p>
+              <p className="text-sm font-medium text-cream">{user?.name || mockUser.displayName}</p>
+              <p className="text-xs text-sage">Level {user?.level || mockUser.level}</p>
             </div>
+            <button
+              onClick={handleLogout}
+              className="ml-2 rounded-lg p-2 text-sage hover:bg-cream/10 hover:text-cream"
+              title="Logout"
+            >
+              <LogOut className="size-5" />
+            </button>
           </div>
         </div>
       </div>

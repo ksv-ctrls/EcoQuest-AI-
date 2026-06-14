@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
 import { useMissionProgress } from '@/context/MissionProgressContext'
+import { useGamification } from '@/context/GamificationContext'
 import {
   formatEcoCoins,
   missionDifficultyLabels,
@@ -37,6 +38,7 @@ export function MissionDetail({ mission, sdgTitle, sdgColor }: MissionDetailProp
     completeMission,
     progress,
   } = useMissionProgress()
+  const { trackMissionStart, trackMissionSubmit, trackMissionComplete } = useGamification()
 
   const state = getState(mission.id)
   const entry = progress[mission.id]
@@ -61,12 +63,14 @@ export function MissionDetail({ mission, sdgTitle, sdgColor }: MissionDetailProp
   const handleSubmit = () => {
     if (!notes.trim()) return
     submitMission(mission.id, { notes: notes.trim(), photoName, photoPreview })
+    trackMissionSubmit(mission.id, mission.sdgId)
     setShowConfirmation(true)
   }
 
   const handleApproveAndComplete = () => {
     approveMission(mission.id)
     completeMission(mission.id)
+    trackMissionComplete(mission.id, mission.sdgId)
   }
 
   if (isPlaceholder) {
@@ -239,7 +243,14 @@ export function MissionDetail({ mission, sdgTitle, sdgColor }: MissionDetailProp
           </CardHeader>
 
           {state === 'available' ? (
-            <Button variant="primary" className="mb-6" onClick={() => startMission(mission.id)}>
+            <Button
+              variant="primary"
+              className="mb-6"
+              onClick={() => {
+                startMission(mission.id)
+                trackMissionStart(mission.id, mission.sdgId)
+              }}
+            >
               Start mission
             </Button>
           ) : null}

@@ -10,6 +10,7 @@ import {
 import { QuizResults } from '@/components/quizzes/QuizResults'
 import type { ActiveSession } from '@/context/QuizProgressContext'
 import { useQuizProgress } from '@/context/QuizProgressContext'
+import { useGamification } from '@/context/GamificationContext'
 import { getQuizById, getSdgQuizCatalog } from '@/data/mock/quiz-catalog'
 import type { Quiz, QuizAnswer, QuizSessionResult } from '@/types/quiz'
 
@@ -25,6 +26,7 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
     completeSession,
     saveResult,
   } = useQuizProgress()
+  const { trackQuizComplete } = useGamification()
 
   const [session, setSession] = useState<ActiveSession | null>(null)
   const [answers, setAnswers] = useState<QuizAnswer[]>([])
@@ -91,6 +93,7 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
       )
       saveResult(finalResult)
       setResult(finalResult)
+      trackQuizComplete(finalResult)
     }
   }
 

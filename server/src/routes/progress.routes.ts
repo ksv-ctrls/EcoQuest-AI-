@@ -1,0 +1,28 @@
+import { Router } from 'express'
+import {
+  createImpactRecord,
+  getImpactRecords,
+  createQuizResult,
+  getProgressSummary,
+  submitMission,
+  unlockAchievement,
+  upsertGameProgress,
+  upsertLessonProgress,
+  updateUserGamification,
+} from '../controllers/progress.controller.js'
+import { authMiddleware } from '../middleware/auth.middleware.js'
+import { upload } from '../middleware/upload.middleware.js'
+
+export const progressRouter = Router()
+
+progressRouter.use(authMiddleware)
+progressRouter.get('/', getProgressSummary)
+progressRouter.put('/lessons', upsertLessonProgress)
+progressRouter.post('/quizzes', createQuizResult)
+progressRouter.post('/missions', upload.single('image'), submitMission)
+progressRouter.put('/games', upsertGameProgress)
+progressRouter.post('/achievements', unlockAchievement)
+progressRouter.post('/impact', createImpactRecord)
+progressRouter.get('/impact', getImpactRecords)
+progressRouter.put('/user-gamification', updateUserGamification)
+

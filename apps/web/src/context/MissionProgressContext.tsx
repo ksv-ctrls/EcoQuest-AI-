@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -21,6 +22,9 @@ import type {
   MissionState,
   MissionSubmission,
 } from '@/types/mission'
+import { useAuth } from '@/context/AuthContext'
+import { getProgressSummary } from '@/api/lessonApi'
+import { submitMissionProgress } from '@/api/missionApi'
 
 const STORAGE_KEY = 'ecoquest-mission-progress'
 
@@ -96,6 +100,47 @@ const MissionProgressContext = createContext<MissionProgressContextValue | null>
 
 export function MissionProgressProvider({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState<MissionProgressMap>(loadProgress)
+  const { isAuthenticated } = useAuth()
+
+  // ── Mount-time hydration from backend ──────────────────────────────
+  useEffect(() => {
+    if (isAuthenticated) {
+      getProgressSummary()
+        .then((data) => {
+          if (data && data.missions && data.missions.length > 0) {
+            setProgress((prev) => {
+              const next = { ...prev }
+              data.missions.forEach((item: any) => {
+                const missionId: string = item.missionId
+                if (!missionId) return
+                const existing = prev[missionId]
+                const backendUpdatedAt = item.updatedAt || item.createdAt || ''
+                const localUpdatedAt = existing?.updatedAt || ''
+                // Prefer whichever record is more recent
+                if (!existing || backendUpdatedAt > localUpdatedAt) {
+                  next[missionId] = {
+                    state: (item.status as MissionState) || 'submitted',
+                    updatedAt: backendUpdatedAt,
+                    submission: item.notes
+                      ? {
+                          notes: item.notes,
+                          photoName: item.imageUrl || undefined,
+                          submittedAt: item.createdAt || backendUpdatedAt,
+                        }
+                      : existing?.submission,
+                  }
+                }
+              })
+              saveProgress(next)
+              return next
+            })
+          }
+        })
+        .catch((err) => {
+          console.warn('Failed to sync mission progress from backend:', err)
+        })
+    }
+  }, [isAuthenticated])
 
   const updateState = useCallback(
     (missionId: string, state: MissionState, submission?: MissionSubmission) => {
@@ -138,9 +183,20 @@ export function MissionProgressProvider({ children }: { children: ReactNode }) {
 
   const submitMission = useCallback(
     (missionId: string, data: Omit<MissionSubmission, 'submittedAt'>) => {
-      updateState(missionId, 'submitted', {
+      const submission: MissionSubmission = {
         ...data,
         submittedAt: new Date().toISOString(),
+      }
+      updateState(missionId, 'submitted', submission)
+
+      // ── Write-through to backend ──────────────────────────────────
+      submitMissionProgress({
+        missionId,
+        notes: data.notes,
+        imageUrl: data.photoName,
+        status: 'submitted',
+      }).catch((err) => {
+        console.warn('Failed to sync mission submission to backend:', err)
       })
     },
     [updateState],

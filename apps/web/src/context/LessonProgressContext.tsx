@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -11,6 +12,8 @@ import {
   getLessonStatus,
   allLessons,
 } from '@/data/mock/lesson-catalog'
+import { saveLessonProgress, getProgressSummary } from '@/api/lessonApi'
+import { useAuth } from '@/context/AuthContext'
 import { mockSdgGoals } from '@/data/mock/sdg'
 import type {
   DashboardLessonInsight,
@@ -121,6 +124,34 @@ const LessonProgressContext = createContext<LessonProgressContextValue | null>(
 
 export function LessonProgressProvider({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState<LessonProgressMap>(loadProgress)
+  const { isAuthenticated } = useAuth()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getProgressSummary()
+        .then((data) => {
+          if (data && data.lessons) {
+            setProgress((prev) => {
+              const next = { ...prev }
+              data.lessons.forEach((item: any) => {
+                const local = prev[item.lessonId]
+                if (!local || new Date(item.updatedAt || 0) > new Date(local.updatedAt || 0) || item.completed) {
+                  next[item.lessonId] = {
+                    status: item.completed ? 'completed' : 'started',
+                    updatedAt: item.updatedAt || new Date().toISOString(),
+                  }
+                }
+              })
+              saveProgress(next)
+              return next
+            })
+          }
+        })
+        .catch((err) => {
+          console.warn('Failed to sync lesson progress from backend:', err)
+        })
+    }
+  }, [isAuthenticated])
 
   const updateProgress = useCallback(
     (lessonId: string, status: LessonStatus) => {
@@ -130,6 +161,12 @@ export function LessonProgressProvider({ children }: { children: ReactNode }) {
           [lessonId]: { status, updatedAt: new Date().toISOString() },
         }
         saveProgress(next)
+        void saveLessonProgress({
+          lessonId,
+          completed: status === 'completed',
+        }).catch(() => {
+          // Local storage remains the source of truth when the API is unavailable.
+        })
         return next
       })
     },

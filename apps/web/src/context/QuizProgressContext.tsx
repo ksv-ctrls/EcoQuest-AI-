@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -23,6 +24,10 @@ import type {
   QuizSessionResult,
 } from '@/types/quiz'
 import { gradeAnswer } from '@/lib/quiz-engine'
+import { useAuth } from '@/context/AuthContext'
+import { getProgressSummary } from '@/api/lessonApi'
+import { saveQuizResult } from '@/api/quizApi'
+
 
 const STORAGE_KEY = 'ecoquest-quiz-results'
 
@@ -133,6 +138,51 @@ const QuizProgressContext = createContext<QuizProgressContextValue | null>(null)
 
 export function QuizProgressProvider({ children }: { children: ReactNode }) {
   const [results, setResults] = useState<QuizSessionResult[]>(loadResults)
+  const { isAuthenticated } = useAuth()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getProgressSummary()
+        .then((data) => {
+          if (data && data.quizzes) {
+            setResults((prev) => {
+              const next = [...prev]
+              data.quizzes.forEach((item: any) => {
+                const exists = prev.some((r) => r.quizId === item.quizId)
+                if (!exists) {
+                  // Standard mapping for backend data
+                  next.push({
+                    quizId: item.quizId,
+                    lessonId: item.lessonId || '',
+                    sdgId: item.sdgId || '',
+                    sdgNumber: item.sdgNumber || 0,
+                    quizTitle: item.quizTitle || 'Quiz Result',
+                    startTime: item.startTime || item.createdAt,
+                    completionTime: item.createdAt,
+                    timeTakenSeconds: item.timeTaken,
+                    correctCount: item.correctCount || 0,
+                    totalQuestions: item.totalQuestions || 5,
+                    score: item.score,
+                    accuracy: item.accuracy,
+                    xpEarned: item.xpEarned || item.score,
+                    strengthAreas: item.strengthAreas || [],
+                    improvementAreas: item.improvementAreas || [],
+                    recommendedLessonId: item.recommendedLessonId || '',
+                    recommendedMissionId: item.recommendedMissionId || '',
+                  })
+                }
+              })
+              next.sort((a, b) => b.completionTime.localeCompare(a.completionTime))
+              saveResults(next)
+              return next
+            })
+          }
+        })
+        .catch((err) => {
+          console.warn('Failed to sync quiz progress from backend:', err)
+        })
+    }
+  }, [isAuthenticated])
 
   const quizStats = useMemo(() => getQuizProgressStats(results), [results])
 
@@ -229,6 +279,16 @@ export function QuizProgressProvider({ children }: { children: ReactNode }) {
     setResults((prev) => {
       const next = [result, ...prev]
       saveResults(next)
+      
+      saveQuizResult({
+        quizId: result.quizId,
+        score: result.score,
+        accuracy: result.accuracy,
+        timeTaken: result.timeTakenSeconds,
+      }).catch((err) => {
+        console.warn('Failed to sync quiz result to backend:', err)
+      })
+
       return next
     })
   }, [])

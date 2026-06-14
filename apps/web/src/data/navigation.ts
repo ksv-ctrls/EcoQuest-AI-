@@ -7,6 +7,9 @@ import {
   Sparkles,
   Target,
   User,
+  Award,
+  Bot,
+  Activity,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -52,8 +55,19 @@ export const mainNavItems: NavItem[] = [
     label: 'Games',
     path: '/games',
     icon: Gamepad2,
-    enabled: false,
-    description: 'Coming soon',
+    enabled: true,
+  },
+  {
+    label: 'AI Tutor',
+    path: '/ai-tutor',
+    icon: Bot,
+    enabled: true,
+  },
+  {
+    label: 'Impact',
+    path: '/impact',
+    icon: Activity,
+    enabled: true,
   },
 ]
 
@@ -62,8 +76,22 @@ export const secondaryNavItems: NavItem[] = [
     label: 'Profile',
     path: '/profile',
     icon: User,
-    enabled: false,
-    description: 'Coming soon',
+    enabled: true,
+    description: 'Your Eco Profile',
+  },
+  {
+    label: 'Achievements',
+    path: '/achievements',
+    icon: Sparkles,
+    enabled: true,
+    description: 'Track your unlocked achievements',
+  },
+  {
+    label: 'Rewards',
+    path: '/rewards',
+    icon: Award,
+    enabled: true,
+    description: 'Spend EcoCoins on rewards',
   },
 ]
 
@@ -97,13 +125,37 @@ export const routeMeta: Record<string, RouteMeta> = {
     title: 'Games',
     subtitle: 'Learn through eco mini-games',
   },
-  '/tutor': {
-    title: 'AI Tutor',
+  '/ai-tutor': {
+    title: 'AI Eco Mentor',
     subtitle: 'Your EcoQuest learning companion',
+  },
+  '/impact': {
+    title: 'Impact Analytics',
+    subtitle: 'Track sustainability outcomes and SDG mastery',
+  },
+  '/impact/report': {
+    title: 'Weekly Report',
+    subtitle: 'Your sustainability activity summary',
+  },
+  '/tutor': {
+    title: 'AI Eco Mentor',
+    subtitle: 'Your EcoQuest learning companion',
+  },
+  '/onboarding': {
+    title: 'Onboarding',
+    subtitle: 'Set up your personalized Eco Profile',
   },
   '/profile': {
     title: 'Profile',
     subtitle: 'Your achievements and settings',
+  },
+  '/achievements': {
+    title: 'Achievements',
+    subtitle: 'Your milestones and unlocked rewards',
+  },
+  '/rewards': {
+    title: 'Rewards',
+    subtitle: 'Spend EcoCoins on avatars, themes, and titles',
   },
 }
 

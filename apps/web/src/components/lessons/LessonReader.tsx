@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
 import { InfographicPlaceholderList } from '@/components/lessons/InfographicPlaceholderList'
 import { KnowledgeCardGrid } from '@/components/lessons/KnowledgeCardGrid'
 import { useLessonProgress } from '@/context/LessonProgressContext'
+import { useGamification } from '@/context/GamificationContext'
 import { difficultyLabels, formatDuration, statusLabels } from '@/lib/lesson-labels'
 import type { Lesson, LessonStatus } from '@/types/lesson'
 import { cn } from '@/lib/cn'
@@ -21,12 +22,14 @@ export function LessonReader({ lesson, sdgTitle, sdgColor }: LessonReaderProps) 
   const navigate = useNavigate()
   const { getStatus, markStarted, markInProgress, markCompleted } =
     useLessonProgress()
+  const { trackLessonStart, trackLessonComplete } = useGamification()
   const status = getStatus(lesson.id)
   const content = lesson.content
 
   useEffect(() => {
     markStarted(lesson.id)
-  }, [lesson.id, markStarted])
+    trackLessonStart(lesson.id, lesson.sdgId)
+  }, [lesson.id, lesson.sdgId, markStarted, trackLessonStart])
 
   if (!content) {
     return (
@@ -53,6 +56,7 @@ export function LessonReader({ lesson, sdgTitle, sdgColor }: LessonReaderProps) 
 
   const handleComplete = () => {
     markCompleted(lesson.id)
+    trackLessonComplete(lesson.id, lesson.sdgId)
     navigate(`/lessons/${lesson.sdgId}`)
   }
 
