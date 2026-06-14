@@ -38,11 +38,9 @@ import { useUserProfile } from '@/context/UserProfileContext'
 import { getLessonById } from '@/data/mock/lesson-catalog'
 import { getQuizById } from '@/data/mock/quiz-catalog'
 import { getMissionById } from '@/data/mock/mission-catalog'
-import { mockDashboardData } from '@/data/mock/dashboard'
 import { GameAnalyticsSection, RecommendedGameSection } from '@/games/components/GameDashboardSections'
 
 export function DashboardPage() {
-  const data = mockDashboardData
   const {
     profile,
     ecoProfile,
@@ -66,11 +64,38 @@ export function DashboardPage() {
     () => (recommendedMissionId ? getMissionById(recommendedMissionId) : null),
     [recommendedMissionId],
   )
-  const { levelSummary, ecoCoinSummary, achievements, badges } = useGamification()
+  const { levelSummary, ecoCoinSummary, achievements, badges, dailyChallenges } = useGamification()
   const { gameProgress } = useGameProgress()
   const { recommendation, analyticsSummary } = useRecommendation()
   const { stats: tutorStats, suggestedPrompts } = useAiTutor()
   const impact = useImpact()
+
+  const levelProgress = useMemo(() => ({
+    currentLevel: levelSummary.currentLevel,
+    nextLevel: levelSummary.nextLevel,
+    progressPercent: levelSummary.progressPercent,
+    pointsToNext: levelSummary.xpToNextLevel,
+  }), [levelSummary])
+
+  const weeklyGoal = useMemo(() => {
+    const completedCount = dailyChallenges.filter((c) => c.completed).length
+    const totalCount = dailyChallenges.length
+    return {
+      label: 'Complete daily challenges',
+      current: completedCount,
+      target: totalCount,
+    }
+  }, [dailyChallenges])
+
+  const mappedBadges = useMemo(() => {
+    return badges.map((b) => ({
+      id: b.id,
+      emoji: b.icon,
+      title: b.name,
+      description: b.description,
+      earned: b.unlocked,
+    }))
+  }, [badges])
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
@@ -391,9 +416,9 @@ export function DashboardPage() {
           <MissionImpactSection />
           <QuizAccuracySection />
           <RecentlyCompletedSection />
-          <LevelProgressCard levelProgress={data.levelProgress} />
-          <BadgePanel badges={data.badges} />
-          <WeeklyGoalCard weeklyGoal={data.weeklyGoal} />
+          <LevelProgressCard levelProgress={levelProgress} />
+          <BadgePanel badges={mappedBadges} />
+          <WeeklyGoalCard weeklyGoal={weeklyGoal} />
         </div>
       </div>
     </div>
